@@ -27,3 +27,69 @@ cd hello-world
                 └── example
                     └── AppTest.java
 ----
+
+. Update pom.xml
++
+[source,diff]
+.pom.xml
+----
+@@ -6,7 +6,11 @@
+   <packaging>jar</packaging>
+   <version>1.0-SNAPSHOT</version>
+   <name>hello-world</name>
+-  <url>http://maven.apache.org</url>
++  <url>http://www.example.com</url>
++  <properties>
++    <maven.compiler.source>1.8</maven.compiler.source>
++    <maven.compiler.target>1.8</maven.compiler.target>
++  </properties>
+   <dependencies>
+     <dependency>
+       <groupId>junit</groupId>
+----
+
+. Build the Project
++
+[source,console]
+----
+$ mvn package
+...
+[INFO] Building jar: .../hello-world/target/hello-world-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16.153 s
+[INFO] Finished at: 2021-12-07T20:37:35+09:00
+[INFO] ------------------------------------------------------------------------
+----
+
+. You may test the newly compiled and packaged JAR with the following command:
++
+[source,console]
+----
+$ java -cp target/hello-world-1.0-SNAPSHOT.jar com.example.App
+Hello World!
+----
+
+. Copy dependencies.
++
+[source,console]
+----
+mvn dependency:copy-dependencies
+----
++
+----
+.
+:
+└── target
+    :
+    ├── dependency
+    :   └── junit-3.8.1.jar
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
