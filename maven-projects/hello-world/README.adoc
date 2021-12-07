@@ -1,0 +1,29 @@
+. Creating a new project, and go to the projects directory.
++
+[source,console]
+----
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=hello-world
+----
++
+----
+cd hello-world
+----
+
+. Under this directory you will notice the following standard project structure.
++
+[source,console]
+----
+.
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       └── com
+    │           └── example
+    │               └── App.java
+    └── test
+        └── java
+            └── com
+                └── example
+                    └── AppTest.java
+----
