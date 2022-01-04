@@ -1,4 +1,4 @@
-public class FunctionReturningMultipleValues {
+public class FunctionReturnMultipleValues {
   public static void main( String[] args ) {
     assert swap("hello", "world") == new String[] {"world", "hello"};
   }

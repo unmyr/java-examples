@@ -1,4 +1,4 @@
-public class FunctionSingleResult {
+public class FunctionReturnSingleValue {
   public static void main( String[] args ) {
     System.out.println(add(42, 13));
   }
