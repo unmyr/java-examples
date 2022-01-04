@@ -94,6 +94,45 @@ b=[Paul, George]
 names=[John, XXX, George, Ringo]
 ----
 
+=== Functions
+
+==== Returning a value in Java
+
+[source,java]
+.FunctionReturnSingleValue.java
+----
+public class FunctionReturnSingleValue {
+  public static void main( String[] args ) {
+    System.out.println(add(42, 13));
+  }
+
+  private static int add(int i, int j) {
+    return i + j;
+  }
+}
+----
+
+.Results
+----
+55
+----
+
+==== Returning Multiple values in Java
+
+[source,java]
+.FunctionReturnMultipleValues.java
+----
+public class FunctionReturnMultipleValues {
+  public static void main( String[] args ) {
+    assert swap("hello", "world") == new String[] {"world", "hello"};
+  }
+
+  private static String[] swap(String a, String b) {
+    return new String[] {b, a};
+  }
+}
+----
+
 === References
 
 // tag::reference[]
