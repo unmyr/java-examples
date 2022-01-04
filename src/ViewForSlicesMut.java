@@ -4,7 +4,7 @@ import java.util.List;
 public class ViewForSlicesMut {
   public static void main( String[] args )
   {
-		List<String> names = Arrays.asList(
+    List<String> names = Arrays.asList(
       "John", "Paul", "George", "Ringo"
     );
     System.out.println("names=" + names.toString());
