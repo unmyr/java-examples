@@ -7,6 +7,10 @@ include::header.adoc[]
 
 == Java
 
+ifndef::env-github[]
+* https://github.com/unmyr/java-examples[unmyr/java-examples^]
+endif::[]
+
 === Arrays
 
 ==== Slices
@@ -117,7 +121,7 @@ public class FunctionReturnSingleValue {
 55
 ----
 
-==== Returning Multiple values in Java
+==== Returning multiple values in Java
 
 [source,java]
 .FunctionReturnMultipleValues.java
