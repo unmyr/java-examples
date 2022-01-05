@@ -126,9 +126,6 @@ Hello world.
 [source,console]
 ----
 $ mvn package
-...
-Hello world.
-...
 ----
 
 . Copy dependencies.
