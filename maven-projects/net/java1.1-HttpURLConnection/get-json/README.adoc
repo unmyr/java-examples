@@ -149,7 +149,7 @@ target/dependency
 +
 [source,console]
 ----
-$ $ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/jackson-annotations-2.13.1.jar com.example.App
+$ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/jackson-annotations-2.13.1.jar com.example.App
 FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
 FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
 FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=2, lastName=Last Name 3]
