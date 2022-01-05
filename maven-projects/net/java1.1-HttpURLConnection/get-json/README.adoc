@@ -1,0 +1,117 @@
+. Creating a new project, and go to the projects directory.
++
+[source,console]
+----
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=get-json
+----
++
+----
+cd get-json
+----
+
+. Update pom.xml
+
+. Source
++
+[source,java]
+----
+package com.example;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    static class Hello { //<1>
+        public String message;
+    }
+
+    public static void main( String[] args )
+    {
+        try {
+            String json_str = "{\"message\": \"Hello world.\"}";
+            ObjectMapper mapper = new ObjectMapper();
+            Hello hello = mapper.readValue(json_str, Hello.class);
+            System.out.println( hello.message );    
+        } catch(JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+}
+----
+<1> You can use Jackson and InnerClass, but the inner class requires a static keyword.
+
+. Build the Project
++
+[source,console]
+----
+$ mvn compile
+----
+
+. Run App
++
+[source,console]
+----
+$ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------< com.example:get-json >------------------------
+[INFO] Building get-json 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ get-json ---
+FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
+FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
+FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=2, lastName=Last Name 3]
+...
+----
+
+. Make a package
++
+[source,console]
+----
+$ mvn package
+----
+
+. Copy dependencies.
++
+[source,console]
+----
+mvn dependency:copy-dependencies
+----
++
+[source,console]
+----
+$ tree target/dependency
+target/dependency
+├── jackson-annotations-2.13.1.jar
+├── jackson-core-2.13.1.jar
+├── jackson-databind-2.13.1.jar
+└── junit-3.8.1.jar
+----
+
+. You may test the newly compiled and packaged JAR with the following command:
++
+[source,console]
+----
+$ $ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/jackson-annotations-2.13.1.jar com.example.App
+FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
+FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
+FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=2, lastName=Last Name 3]
+...
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
+
+== References
+* https://stackoverflow.com/questions/17289964/jackson-json-type-mapping-inner-class[java - Jackson Json Type Mapping Inner Class - Stack Overflow^] +
+  java ObjectMapper inner class - Google 検索
+** http://www.cowtowncoder.com/blog/archives/2010/08/entry_411.html[Jackson and Inner Classes: yes, you can use, but they must be STATIC inner classes^]
