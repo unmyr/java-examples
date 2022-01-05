@@ -6,6 +6,8 @@
     "Dartifact",
     "databind",
     "fasterxml",
+    "httpclient",
+    "httpcore",
     "println"
   ]
 }

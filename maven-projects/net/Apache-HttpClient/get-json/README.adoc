@@ -1,0 +1,175 @@
+== Example of HttpURLConnection
+
+. Creating a new project, and go to the projects directory.
++
+[source,console]
+----
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=get-json
+----
++
+----
+cd get-json
+----
+
+. Update pom.xml
+
+. Source
++
+[source,java]
+.src/main/java/com/example/App.java
+----
+package com.example;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        try {
+
+            HttpGet getRequest = new HttpGet(
+                "https://fakerestapi.azurewebsites.net/api/v1/Authors"
+            );
+
+            // Set the API media type in http accept header
+            getRequest.addHeader("Accept", "application/json");
+            HttpResponse response = httpClient.execute(getRequest);
+
+            ObjectMapper mapper = new ObjectMapper();
+            FakeRestApiAuthors[] authors = mapper.readValue(
+                httpResponse.getEntity().getContent(),
+                FakeRestApiAuthors[].class
+            );
+
+            for (FakeRestApiAuthors author : authors) {
+                System.out.println(author.toString());
+            }
+        } catch (java.net.MalformedURLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch(java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+----
++
+[source,java]
+.src/main/java/com/example/FakeRestApiAuthors.java
+----
+package com.example;
+
+/**
+ * @see https://fakerestapi.azurewebsites.net/index.html
+ * @example
+ * [
+ *   {
+ *     "id": 0, "idBook": 0, "firstName": "string",
+ *     "lastName": "string"
+ *   }
+ * ]
+ */
+public class FakeRestApiAuthors {
+  public int id;
+  public int idBook;
+  public String firstName;
+  public String lastName;
+
+  @Override
+  public String toString() {
+    return "FakeRestApiAuthors [firstName=" + firstName + ", id=" + id + ", idBook=" + idBook + ", lastName=" + lastName
+        + "]";
+  }
+}
+----
+
+. Build the Project
++
+[source,console]
+----
+$ mvn compile
+----
+
+. Run App
++
+[source,console]
+----
+$ mvn exec:java
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------< com.example:get-json >------------------------
+[INFO] Building get-json 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ get-json ---
+FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
+FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
+FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=1, lastName=Last Name 3]
+...
+----
+
+. Make a package
++
+[source,console]
+----
+$ mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------< com.example:get-json >------------------------
+[INFO] Building get-json 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+...
+----
+
+. Copy dependencies.
++
+[source,console]
+----
+mvn dependency:copy-dependencies
+----
++
+[source,console]
+----
+$ tree target/dependency
+target/dependency
+├── commons-codec-1.11.jar
+├── commons-logging-1.2.jar
+├── httpclient-4.5.13.jar
+├── httpcore-4.4.13.jar
+├── jackson-annotations-2.13.1.jar
+├── jackson-core-2.13.1.jar
+├── jackson-databind-2.13.1.jar
+└── junit-3.8.1.jar
+----
+
+. You may test the newly compiled and packaged JAR with the following command:
++
+[source,console]
+----
+$ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/commons-codec-1.11.jar:target/dependency/commons-logging-1.2.jar:target/dependency/httpclient-4.5.13.jar:target/dependency/httpcore-4.4.13.jar:target/dependency/jackson-annotations-2.13.1.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/junit-3.8.1.jar com.example.App
+FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
+FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
+FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=2, lastName=Last Name 3]
+...
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
+
+== References
+* https://stackoverflow.com/questions/17289964/jackson-json-type-mapping-inner-class[java - Jackson Json Type Mapping Inner Class - Stack Overflow^] +
+  java ObjectMapper inner class - Google 検索
+** http://www.cowtowncoder.com/blog/archives/2010/08/entry_411.html[Jackson and Inner Classes: yes, you can use, but they must be STATIC inner classes^]
