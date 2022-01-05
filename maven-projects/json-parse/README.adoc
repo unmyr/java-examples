@@ -1,0 +1,169 @@
+. Creating a new project, and go to the projects directory.
++
+[source,console]
+----
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=json-parse
+----
++
+----
+cd json-parse
+----
+
+. Update pom.xml
++
+[source,diff]
+.pom.xml
+----
+@@ -6,7 +6,31 @@
+   <packaging>jar</packaging>
+   <version>1.0-SNAPSHOT</version>
+   <name>json-parse</name>
+-  <url>http://maven.apache.org</url>
++  <url>http://www.example.com</url>
++  <properties>
++    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++    <maven.compiler.source>1.8</maven.compiler.source>
++    <maven.compiler.target>1.8</maven.compiler.target>
++  </properties>
++  <build>
++    <plugins>
++      <plugin>
++        <groupId>org.codehaus.mojo</groupId>
++        <artifactId>exec-maven-plugin</artifactId>
++        <version>3.0.0</version>
++        <executions>
++          <execution>
++            <goals>
++              <goal>java</goal>
++            </goals>
++          </execution>
++        </executions>
++        <configuration>
++          <mainClass>com.example.App</mainClass>
++        </configuration>
++      </plugin>
++    </plugins>
++  </build>
+   <dependencies>
+     <dependency>
+       <groupId>junit</groupId>
+@@ -14,5 +38,21 @@
+       <version>3.8.1</version>
+       <scope>test</scope>
+     </dependency>
++    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
++    <dependency>
++      <groupId>com.fasterxml.jackson.core</groupId>
++      <artifactId>jackson-core</artifactId>
++      <version>2.13.1</version>
++    </dependency>
++    <dependency>
++      <groupId>com.fasterxml.jackson.core</groupId>
++      <artifactId>jackson-databind</artifactId>
++      <version>2.13.1</version>
++    </dependency>
++    <dependency>
++      <groupId>com.fasterxml.jackson.core</groupId>
++      <artifactId>jackson-annotations</artifactId>
++      <version>2.13.1</version>
++    </dependency>
+   </dependencies>
+ </project>
+----
+
+. Source
++
+[source,java]
+----
+package com.example;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    static class Hello { //<1>
+        public String message;
+    }
+
+    public static void main( String[] args )
+    {
+        try {
+            String json_str = "{\"message\": \"Hello world.\"}";
+            ObjectMapper mapper = new ObjectMapper();
+            Hello hello = mapper.readValue(json_str, Hello.class);
+            System.out.println( hello.message );    
+        } catch(JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+}
+----
+<1> You can use Jackson and InnerClass, but the inner class requires a static keyword.
+
+. Build the Project
++
+[source,console]
+----
+$ mvn compile
+----
+
+. Run App
++
+[source,console]
+----
+$ mvn exec:java
+...
+Hello world.
+...
+----
+
+. Make a package
++
+[source,console]
+----
+$ mvn package
+...
+Hello world.
+...
+----
+
+. Copy dependencies.
++
+[source,console]
+----
+mvn dependency:copy-dependencies
+----
++
+[source,console]
+----
+$ tree target/dependency
+target/dependency
+├── jackson-annotations-2.13.1.jar
+├── jackson-core-2.13.1.jar
+├── jackson-databind-2.13.1.jar
+└── junit-3.8.1.jar
+----
+
+. You may test the newly compiled and packaged JAR with the following command:
++
+[source,console]
+----
+$ java -cp target/json-parse-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/jackson-annotations-2.13.1.jar com.example.App
+Hello world.
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
+
+== References
+* https://stackoverflow.com/questions/17289964/jackson-json-type-mapping-inner-class[java - Jackson Json Type Mapping Inner Class - Stack Overflow^] +
+  java ObjectMapper inner class - Google 検索
+** http://www.cowtowncoder.com/blog/archives/2010/08/entry_411.html[Jackson and Inner Classes: yes, you can use, but they must be STATIC inner classes^]
