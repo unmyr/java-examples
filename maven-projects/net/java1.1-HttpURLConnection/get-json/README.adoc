@@ -1,3 +1,5 @@
+== Example of HttpURLConnection
+
 . Creating a new project, and go to the projects directory.
 +
 [source,console]
@@ -14,8 +16,12 @@ cd get-json
 . Source
 +
 [source,java]
+.src/main/java/com/example/App.java
 ----
 package com.example;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -25,24 +31,70 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  */
 public class App 
 {
-    static class Hello { //<1>
-        public String message;
-    }
-
     public static void main( String[] args )
     {
+        URL url;
         try {
-            String json_str = "{\"message\": \"Hello world.\"}";
+            // Create a neat value object to hold the URL
+            url = new URL("https://fakerestapi.azurewebsites.net/api/v1/Authors");
+
+            // Open a connection(?) on the URL(??) and cast the response(???)
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Now it's "open", we can set the request method, headers etc.
+            connection.setRequestProperty("Accept", "application/json");
+
+            // This line makes the request
+            InputStream responseStream = connection.getInputStream();
+
+            // Manually converting the response body InputStream to APOD using Jackson
             ObjectMapper mapper = new ObjectMapper();
-            Hello hello = mapper.readValue(json_str, Hello.class);
-            System.out.println( hello.message );    
-        } catch(JsonProcessingException e) {
+            FakeRestApiAuthors[] authors = mapper.readValue(
+                responseStream, FakeRestApiAuthors[].class
+            );
+
+            // Finally we have the response
+            for (FakeRestApiAuthors author : authors) {
+                System.out.println(author.toString());
+            }
+        } catch (java.net.MalformedURLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch(java.io.IOException e) {
             e.printStackTrace();
         }
     }
 }
 ----
-<1> You can use Jackson and InnerClass, but the inner class requires a static keyword.
++
+[source,java]
+.src/main/java/com/example/FakeRestApiAuthors.java
+----
+package com.example;
+
+/**
+ * @see https://fakerestapi.azurewebsites.net/index.html
+ * @example
+ * [
+ *   {
+ *     "id": 0, "idBook": 0, "firstName": "string",
+ *     "lastName": "string"
+ *   }
+ * ]
+ */
+public class FakeRestApiAuthors {
+  public int id;
+  public int idBook;
+  public String firstName;
+  public String lastName;
+
+  @Override
+  public String toString() {
+    return "FakeRestApiAuthors [firstName=" + firstName + ", id=" + id + ", idBook=" + idBook + ", lastName=" + lastName
+        + "]";
+  }
+}
+----
 
 . Build the Project
 +
