@@ -172,6 +172,4 @@ mvn clean
 ----
 
 == References
-* https://stackoverflow.com/questions/17289964/jackson-json-type-mapping-inner-class[java - Jackson Json Type Mapping Inner Class - Stack Overflow^] +
-  java ObjectMapper inner class - Google 検索
-** http://www.cowtowncoder.com/blog/archives/2010/08/entry_411.html[Jackson and Inner Classes: yes, you can use, but they must be STATIC inner classes^]
+* https://fakerestapi.azurewebsites.net/index.html[FakeRESTApi^]
