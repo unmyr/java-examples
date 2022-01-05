@@ -27,7 +27,7 @@ public class App
             // This line makes the request
             InputStream responseStream = connection.getInputStream();
 
-            // Manually converting the response body InputStream to APOD using Jackson
+            // Manually converting the response body InputStream to FakeRestApiAuthors[] using Jackson
             ObjectMapper mapper = new ObjectMapper();
             FakeRestApiAuthors[] authors = mapper.readValue(
                 responseStream, FakeRestApiAuthors[].class
