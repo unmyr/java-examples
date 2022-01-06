@@ -137,6 +137,132 @@ public class FunctionReturnMultipleValues {
 }
 ----
 
+=== Time
+
+==== Duration
+
+==== ISO 8601
+
+* Using `SimpleDateFormat`
++
+[source,java]
+----
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class DateTimeFormatterExample {
+  public static void main( String[] args ) {
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); 
+    df.setTimeZone(tz);
+    String nowAsISO = df.format(new Date());
+    System.out.println(nowAsISO);  // -> 2022-01-06T14:31Z
+  }
+}
+----
++
+.Results
+----
+2022-01-06T14:46:45Z
+----
+
+* using `ZonedDateTime`
++
+[source,java]
+----
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeFormatterExample {
+  public static void main( String[] args ) {
+    System.out.println(
+      ZonedDateTime.now(
+        ZoneOffset.UTC
+      ).format(
+        DateTimeFormatter.ISO_INSTANT
+      )
+    ); // -> 2022-01-06T14:39:24.596Z
+  }
+}
+----
++
+.Results
+----
+2022-01-06T14:44:17Z
+----
+
+* DateTimeFormatter
++
+[source,java]
+----
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeFormatterExample {
+  public static void main( String[] args ) {
+    // Java 8, or later
+    String thisMoment = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd'T'HH:mm:ssX"
+    ).withZone(
+      ZoneOffset.UTC
+    ).format(
+      Instant.now()
+    );
+    System.out.println(thisMoment);  // -> 2022-01-06T14:36:48Z
+  }
+}
+----
++
+.Results
+----
+2022-01-06T14:44:17Z
+----
+
+
+[source,java]
+----
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class DateTimeFormatterExample {
+  public static void main( String[] args ) {
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); 
+    df.setTimeZone(tz);
+    String nowAsISO = df.format(new Date());
+    System.out.println(nowAsISO);  // -> 2022-01-06T14:31Z
+
+    System.out.println(
+      ZonedDateTime.now(
+        ZoneOffset.UTC
+      ).format(
+        DateTimeFormatter.ISO_INSTANT
+      )
+    ); // -> 2022-01-06T14:39:24.596Z
+
+    // Java 8, or later
+    String thisMoment = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd'T'HH:mm:ssX"
+    ).withZone(
+      ZoneOffset.UTC
+    ).format(
+      Instant.now()
+    );
+    System.out.println(thisMoment);  // -> 2022-01-06T14:36:48Z
+  }
+}
+----
+
 === References
 
 // tag::reference[]
