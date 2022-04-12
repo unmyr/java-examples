@@ -29,6 +29,8 @@ public class App
     
         try {
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+            String jobName = jobExecution.getJobInstance().getJobName();
+            System.out.println("jobName:" + jobName);
         }
         catch (JobExecutionAlreadyRunningException e) {
             e.printStackTrace();
