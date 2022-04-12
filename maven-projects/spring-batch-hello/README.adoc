@@ -382,5 +382,69 @@ $ java -cp target/spring-batch-hello-1.0-SNAPSHOT.jar:target/dependency/...
 mvn clean
 ----
 
+=== Notes
+
+==== Resource leak: 'context' is never closed
+
+[source,java]
+----
+public class App 
+{
+    public static void main( String[] args )
+    {
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
+        // ...
+    }
+}
+----
+
+----
+Resource leak: 'context' is never closed
+----
+
+[source,diff]
+----
+@@ -7,22 +7,22 @@ import org.springframework.batch.core.JobParametersBuilder;
+ import org.springframework.batch.core.JobParametersInvalidException;
+ import org.springframework.batch.core.launch.JobLauncher;
+ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+ import org.springframework.batch.core.repository.JobRestartException;
+-import org.springframework.context.ApplicationContext;
++import org.springframework.context.ConfigurableApplicationContext;
+ import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+ /**
+  * Hello world!
+  *
+  */
+ public class App
+ {
+     public static void main( String[] args )
+     {
+-        ApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
++        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
+
+         JobLauncher jobLauncher = context.getBean(JobLauncher.class);
+         Job job = context.getBean("listEmployeesJob", Job.class);
+
+         JobParameters jobParameters = new JobParametersBuilder().toJobParameters();
+@@ -39,8 +39,10 @@ public class App
+         catch (JobInstanceAlreadyCompleteException e) {
+             e.printStackTrace();
+         }
+         catch (JobParametersInvalidException e) {
+             e.printStackTrace();
++        } finally {
++            context.close();
+         }
+     }
+ }
+----
+
+.References
+* https://stackoverflow.com/questions/17270066/closing-a-spring-applicationcontext[java - Closing a Spring ApplicationContext - Stack Overflow^]
+* https://spring.pleiades.io/spring-framework/docs/current/javadoc-api/org/springframework/context/ConfigurableApplicationContext.html[ConfigurableApplicationContext (Spring Framework 5.3.18 API) - Javadoc^]
+
 == References
 * https://learntutorials.net/ja/spring-batch/topic/4089/%E3%82%B9%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%90%E3%83%83%E3%83%81%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9[spring-batch チュートリアル => スプリングバッチの使い方^]
