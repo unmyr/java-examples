@@ -8,7 +8,7 @@ $ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D gr
 ----
 +
 ----
-cd json-parse
+cd simple-chunk-example
 ----
 
 . Update pom.xml
