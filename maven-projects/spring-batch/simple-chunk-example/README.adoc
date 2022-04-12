@@ -4,7 +4,7 @@
 +
 [source,console]
 ----
-$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=spring-batch-hello
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=simple-chunk-example
 ----
 +
 ----
@@ -306,15 +306,15 @@ $ mvn exec:java
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ spring-batch-hello ---
-Apr 12, 2022 4:56:35 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
 WARNING: No datasource was provided...using a Map based JobRepository
-Apr 12, 2022 4:56:35 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
 WARNING: No transaction manager was provided, using a ResourcelessTransactionManager
-Apr 12, 2022 4:56:35 PM org.springframework.batch.core.launch.support.SimpleJobLauncher afterPropertiesSet
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.launch.support.SimpleJobLauncher afterPropertiesSet
 INFO: No TaskExecutor has been set, defaulting to synchronous executor.
-Apr 12, 2022 4:56:35 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
 INFO: Job: [SimpleJob: [name=listEmployeesJob]] launched with the following parameters: [{}]
-Apr 12, 2022 4:56:35 PM org.springframework.batch.core.job.SimpleStepHandler handleStep
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.job.SimpleStepHandler handleStep
 INFO: Executing step: [step1]
 Name: JOHN DOE; Age: 35; Salary: 90000
 Name: SUE SMITH; Age: 45; Salary: 95000
@@ -322,16 +322,16 @@ Name: JOE BROWN; Age: 33; Salary: 86000
 Name: CAROL DUNN; Age: 25; Salary: 75000
 Name: MIKE WARD; Age: 23; Salary: 70000
 Name: LISA JONES; Age: 22; Salary: 69000
-Apr 12, 2022 4:56:36 PM org.springframework.batch.core.step.AbstractStep execute
-INFO: Step: [step1] executed in 113ms
-Apr 12, 2022 4:56:36 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
-INFO: Job: [SimpleJob: [name=listEmployeesJob]] completed with the following parameters: [{}] and the following status: [COMPLETED] in 151ms
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.step.AbstractStep execute
+INFO: Step: [step1] executed in 153ms
+Apr 12, 2022 7:01:13 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
+INFO: Job: [SimpleJob: [name=listEmployeesJob]] completed with the following parameters: [{}] and the following status: [COMPLETED] in 202ms
 jobName:listEmployeesJob, jobBatchStatus:COMPLETED
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  3.250 s
-[INFO] Finished at: 2022-04-12T16:56:36+09:00
+[INFO] Total time:  4.603 s
+[INFO] Finished at: 2022-04-12T19:01:13+09:00
 [INFO] ------------------------------------------------------------------------
 ----
 
