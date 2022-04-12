@@ -1,5 +1,6 @@
 package com.example;
 
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -9,6 +10,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -20,7 +22,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
 
         JobLauncher jobLauncher = context.getBean(JobLauncher.class);
         Job job = context.getBean("listEmployeesJob", Job.class);
@@ -30,7 +32,8 @@ public class App
         try {
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
             String jobName = jobExecution.getJobInstance().getJobName();
-            System.out.println("jobName:" + jobName);
+            BatchStatus jobBatchStatus = jobExecution.getStatus();
+            System.out.println("jobName:" + jobName + ", jobBatchStatus:" + jobBatchStatus);
         }
         catch (JobExecutionAlreadyRunningException e) {
             e.printStackTrace();
@@ -44,7 +47,7 @@ public class App
         catch (JobParametersInvalidException e) {
             e.printStackTrace();
         } finally {
-            context.close();
+            ((ConfigurableApplicationContext)context).close();
         }
     }
 }

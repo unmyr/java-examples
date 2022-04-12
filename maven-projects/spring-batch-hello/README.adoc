@@ -77,6 +77,7 @@ cd json-parse
 ----
 package com.example;
 
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -86,6 +87,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -97,7 +99,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
 
         JobLauncher jobLauncher = context.getBean(JobLauncher.class);
         Job job = context.getBean("listEmployeesJob", Job.class);
@@ -107,7 +109,8 @@ public class App
         try {
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
             String jobName = jobExecution.getJobInstance().getJobName();
-            System.out.println("jobName:" + jobName);
+            BatchStatus jobBatchStatus = jobExecution.getStatus();
+            System.out.println("jobName:" + jobName + ", jobBatchStatus:" + jobBatchStatus);
         }
         catch (JobExecutionAlreadyRunningException e) {
             e.printStackTrace();
@@ -121,7 +124,7 @@ public class App
         catch (JobParametersInvalidException e) {
             e.printStackTrace();
         } finally {
-            context.close();
+            ((ConfigurableApplicationContext)context).close();
         }
     }
 }
@@ -303,15 +306,15 @@ $ mvn exec:java
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ spring-batch-hello ---
-Apr 12, 2022 2:24:51 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
+Apr 12, 2022 4:56:35 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
 WARNING: No datasource was provided...using a Map based JobRepository
-Apr 12, 2022 2:24:51 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
+Apr 12, 2022 4:56:35 PM org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer initialize
 WARNING: No transaction manager was provided, using a ResourcelessTransactionManager
-Apr 12, 2022 2:24:51 PM org.springframework.batch.core.launch.support.SimpleJobLauncher afterPropertiesSet
+Apr 12, 2022 4:56:35 PM org.springframework.batch.core.launch.support.SimpleJobLauncher afterPropertiesSet
 INFO: No TaskExecutor has been set, defaulting to synchronous executor.
-Apr 12, 2022 2:24:51 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
+Apr 12, 2022 4:56:35 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
 INFO: Job: [SimpleJob: [name=listEmployeesJob]] launched with the following parameters: [{}]
-Apr 12, 2022 2:24:52 PM org.springframework.batch.core.job.SimpleStepHandler handleStep
+Apr 12, 2022 4:56:35 PM org.springframework.batch.core.job.SimpleStepHandler handleStep
 INFO: Executing step: [step1]
 Name: JOHN DOE; Age: 35; Salary: 90000
 Name: SUE SMITH; Age: 45; Salary: 95000
@@ -319,15 +322,16 @@ Name: JOE BROWN; Age: 33; Salary: 86000
 Name: CAROL DUNN; Age: 25; Salary: 75000
 Name: MIKE WARD; Age: 23; Salary: 70000
 Name: LISA JONES; Age: 22; Salary: 69000
-Apr 12, 2022 2:24:52 PM org.springframework.batch.core.step.AbstractStep execute
-INFO: Step: [step1] executed in 251ms
-Apr 12, 2022 2:24:52 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
-INFO: Job: [SimpleJob: [name=listEmployeesJob]] completed with the following parameters: [{}] and the following status: [COMPLETED] in 370ms
+Apr 12, 2022 4:56:36 PM org.springframework.batch.core.step.AbstractStep execute
+INFO: Step: [step1] executed in 113ms
+Apr 12, 2022 4:56:36 PM org.springframework.batch.core.launch.support.SimpleJobLauncher$1 run
+INFO: Job: [SimpleJob: [name=listEmployeesJob]] completed with the following parameters: [{}] and the following status: [COMPLETED] in 151ms
+jobName:listEmployeesJob, jobBatchStatus:COMPLETED
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  3.496 s
-[INFO] Finished at: 2022-04-12T14:24:52+09:00
+[INFO] Total time:  3.250 s
+[INFO] Finished at: 2022-04-12T16:56:36+09:00
 [INFO] ------------------------------------------------------------------------
 ----
 
