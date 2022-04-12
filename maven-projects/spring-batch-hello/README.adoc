@@ -236,7 +236,7 @@ public class SpringBatchHelloWorldConfig {
         FlatFileItemReader<Employee> reader = new FlatFileItemReader<>();
         reader.setResource(new ClassPathResource("employees.csv"));
 
-        DefaultLineMapper defaultLineMapper = new DefaultLineMapper();
+        DefaultLineMapper<Employee> defaultLineMapper = new DefaultLineMapper<>();
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
         delimitedLineTokenizer.setNames(new String[] {"firstName", "lastName", "age", "salary"});
 
