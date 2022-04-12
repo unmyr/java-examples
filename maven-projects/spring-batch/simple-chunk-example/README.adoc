@@ -1,4 +1,4 @@
-== Example to parse JSON
+== Chunk-oriented Processing
 
 . Creating a new project, and go to the projects directory.
 +
