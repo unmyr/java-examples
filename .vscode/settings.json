@@ -1,13 +1,19 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "cSpell.words": [
+    "Autowired",
     "codehaus",
+    "Configurer",
     "Darchetype",
     "Dartifact",
     "databind",
+    "datasource",
     "fasterxml",
     "httpclient",
     "httpcore",
-    "println"
+    "javax",
+    "println",
+    "Resourceless",
+    "springframework"
   ]
 }
