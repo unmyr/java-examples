@@ -1,6 +1,7 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "cSpell.words": [
+    "autoconfigure",
     "Autowired",
     "codehaus",
     "Configurer",
@@ -15,6 +16,7 @@
     "javax",
     "println",
     "Resourceless",
+    "servlet",
     "springframework"
   ]
 }
