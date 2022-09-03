@@ -1,4 +1,33 @@
-== Java
+== Java examples
+
+=== VS-Code
+
+==== Project configuration is not up-to-date with pom.xml, requires an update.
+
+* Before
++
+[source,json]
+..vscode/settings.json
+----
+{
+  "java.configuration.updateBuildConfiguration": "interactive"
+}
+----
+
+* After
++
+[source,json]
+..vscode/settings.json
+----
+{
+  "java.configuration.updateBuildConfiguration": "automatic"
+}
+----
+
+.References
+* https://github.com/microsoft/vscode-maven/issues/132[Project configuration is not up-to-date with pom.xml, requires an update. · Issue #132 · microsoft/vscode-maven^] +
+  Project configuration is not up-to-date with pom.xml, requires an update. - Google Search
+
 
 === Switch versions
 
