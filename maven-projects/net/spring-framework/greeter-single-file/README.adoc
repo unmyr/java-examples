@@ -127,6 +127,22 @@ $ curl -s http://localhost:8080/hello/Spring%20Community | python -m json.tool
 mvn clean
 ----
 
+=== Build docker image
+
+. Start the docker service (if not running)
++
+[source,console]
+----
+$ sudo service docker start
+----
+
+. Build a docker image
++
+[source,console]
+----
+$ mvn spring-boot:build-image
+----
+
 == References
 * https://spring.io/projects/spring-boot[Spring Boot | spring.io^]
 * https://spring.pleiades.io/projects/spring-boot[Spring Boot | spring.io^]

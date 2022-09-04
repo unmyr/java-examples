@@ -110,6 +110,8 @@ $ javac -version
 javac 1.8.0_292
 ----
 
+===== Install Maven
+
 . Install Maven
 +
 [source,console]
@@ -165,12 +167,83 @@ $ mvn spring-boot:build-image
 ----
 ====
 
-. Install Maven
+===== Install Maven
+
+. Download public key
 +
 [source,console]
 ----
-sudo apt-get update
-sudo apt install maven
+$ wget https://downloads.apache.org/maven/KEYS
+...
+$ gpg --import KEYS
+...
+gpg: Total number processed: 75
+gpg:               imported: 74
+gpg:              unchanged: 1
+gpg: no ultimately trusted keys found
+$ rm -f KEYS
+----
+
+. Download maven
++
+[source,console]
+----
+$ wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.{gz,gz.asc}
+...
+$ gpg --verify apache-maven-3.8.6-bin.tar.gz.asc apache-maven-3.8.6-bin.tar.gz
+gpg: Signature made Tue Jun  7 01:39:26 2022 JST
+gpg:                using RSA key 6A814B1F869C2BBEAB7CB7271A2A1C94BDE89688
+gpg: Good signature from "Michael Osipov (Java developer) <1983-01-06@gmx.net>" [unknown]
+gpg:                 aka "Michael Osipov <michaelo@apache.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 6A81 4B1F 869C 2BBE AB7C  B727 1A2A 1C94 BDE8 9688
+$ rm -f apache-maven-3.8.6-bin.tar.gz.asc
+----
+
+. Extract tar files to a `/opt` Directory
++
+[source,console]
+----
+$ sudo tar zxf apache-maven-3.8.6-bin.tar.gz -C /opt
+$ sudo bash -c "(cd /opt && ln -s apache-maven-3.8.6 apache-maven)"
+$ ls -ld /opt/apache-maven*
+lrwxrwxrwx 1 root root   18 Sep  4 18:41 /opt/apache-maven -> apache-maven-3.8.6
+drwxr-xr-x 6 root root 4096 Sep  4 18:38 /opt/apache-maven-3.8.6
+----
+
+. Adding to PATH
++
+[source,shell]
+.~/.bashrc
+----
+# ...snip
+
+MAVEN_HOME="/opt/apache-maven"
+if [ -d ${MAVEN_HOME} ]; then
+    export PATH="${MAVEN_HOME}/bin:$PATH"
+fi
+----
+
+. Reload shell
++
+[source,bash]
+----
+exec $SHELL -l
+----
+
+. Check path and version
++
+[source,console]
+----
+$ type mvn
+mvn is /opt/apache-maven/bin/mvn
+$ mvn -version
+Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
+Maven home: /opt/apache-maven
+Java version: 17.0.4, vendor: Private Build, runtime: /usr/lib/jvm/java-17-openjdk-amd64
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "5.10.16.3-microsoft-standard-wsl2", arch: "amd64", family: "unix
 ----
 
 === VS-Code

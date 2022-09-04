@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  app:
+    image: greeter-single-file:1.0-SNAPSHOT
+    container_name: greeter-single-file
+    ports:
+      - 8080:8080
