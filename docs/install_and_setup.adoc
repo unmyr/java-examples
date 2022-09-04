@@ -1,6 +1,7 @@
 ifndef::leveloffset[]
 :toc: left
 :toclevels: 3
+:icons: font
 endif::[]
 
 include::header.adoc[]
@@ -44,17 +45,6 @@ sudo apt-get install openjdk-8-jdk
 $ sudo update-java-alternatives --list
 java-1.11.0-openjdk-amd64      1111       /usr/lib/jvm/java-1.11.0-openjdk-amd64
 java-1.8.0-openjdk-amd64       1081       /usr/lib/jvm/java-1.8.0-openjdk-amd64
-----
-+
-[source,console]
-----
-$ java -version
-openjdk version "17.0.4" 2022-07-19
-OpenJDK Runtime Environment (build 17.0.4+8-Ubuntu-120.04)
-OpenJDK 64-Bit Server VM (build 17.0.4+8-Ubuntu-120.04, mixed mode, sharing)
-$ update-java-alternatives --list
-java-1.11.0-openjdk-amd64      1111       /usr/lib/jvm/java-1.11.0-openjdk-amd64
-java-1.17.0-openjdk-amd64      1711       /usr/lib/jvm/java-1.17.0-openjdk-amd64
 ----
 
 . Make version 8 your default Java:
@@ -147,7 +137,18 @@ Default locale: en, platform encoding: UTF-8
 OS name: "linux", version: "5.10.16.3-microsoft-standard-wsl2", arch: "amd64", family: "unix"
 ----
 +
-[WARN]
+[source,console]
+----
+$ java -version
+openjdk version "17.0.4" 2022-07-19
+OpenJDK Runtime Environment (build 17.0.4+8-Ubuntu-120.04)
+OpenJDK 64-Bit Server VM (build 17.0.4+8-Ubuntu-120.04, mixed mode, sharing)
+$ update-java-alternatives --list
+java-1.11.0-openjdk-amd64      1111       /usr/lib/jvm/java-1.11.0-openjdk-amd64
+java-1.17.0-openjdk-amd64      1711       /usr/lib/jvm/java-1.17.0-openjdk-amd64
+----
++
+[WARNING]
 .Maven 3.6.3 not working on Ubuntu 20.04 LTS
 ====
 [source,console]
@@ -380,4 +381,3 @@ Hello World!
 * https://qiita.com/KevinFQ/items/e8363ad6123713815e68[よく使うMavenコマンド集 - Qiita^] +
   maven build - Google 検索
 // end::reference[]
-
