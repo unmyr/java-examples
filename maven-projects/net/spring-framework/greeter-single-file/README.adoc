@@ -1,0 +1,139 @@
+== Example of SpringBoot
+
+. Creating a new project, and go to the projects directory.
++
+[source,console]
+----
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.4 -DartifactId=greeter-single-file
+----
++
+----
+cd greeter
+----
+
+. Update pom.xml
+
+. Source
++
+[source,java]
+.src/main/java/com/example/App.java
+----
+package com.example;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * Simple greeting application
+ *
+ */
+@SpringBootApplication
+@RestController
+public class App {
+  private static final String template = "Hello, %s!";
+
+  @GetMapping("/hello/{name}")
+  public Map<String, String> greeting(@PathVariable(value = "name") String name) {
+    HashMap<String, String> map = new HashMap<>();
+    map.put("message", String.format(template, name));
+    return map;
+  }
+
+  public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+  }
+}
+----
+
+. Run test
++
+[source,console]
+----
+$ mvn test
+...
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.333 s - in com.example.AppTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.039 s
+[INFO] Finished at: 2022-09-04T12:53:51+09:00
+[INFO] ------------------------------------------------------------------------
+----
+
+. Test server
++
+[source,console]
+----
+$ mvn spring-boot:run
+...
+----
++
+Open a new terminal and run the following command:
++
+[source,console]
+----
+$ curl -s http://localhost:8080/hello/Spring%20Community | python -m json.tool
+{
+    "message": "Hello, Spring Community!"
+}
+----
+
+. Make a package
++
+[source,console]
+----
+$ mvn package
+...
+[INFO] Building jar: .../greeter/target/greeter-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  25.727 s
+[INFO] Finished at: 2022-09-03T19:08:17+09:00
+[INFO] ------------------------------------------------------------------------
+----
+
+. Generate jar file
++
+----
+$ mvn package spring-boot:repackage
+...
+$ java -jar target/greeter-single-file-1.0-SNAPSHOT.jar
+....
+----
++
+----
+$ curl -s http://localhost:8080/hello/Spring%20Community | python -m json.tool
+{
+    "message": "Hello, Spring Community!"
+}
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
+
+== References
+* https://spring.io/projects/spring-boot[Spring Boot | spring.io^]
+* https://spring.pleiades.io/projects/spring-boot[Spring Boot | spring.io^]
+** https://spring.pleiades.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/[Spring Boot Maven プラグインのドキュメント - リファレンス^] +
+   "mvn spring-boot:run" - Google 検索
+* https://stackoverflow.com/questions/54867295/springboot-no-main-manifest-attribute-maven[java - SpringBoot no main manifest attribute (maven) - Stack Overflow^] +
+  maven spring "no main manifest attribute" - Google 検索
+* App
+** https://spring.io/guides/gs/spring-boot-docker/[Getting Started | Spring Boot with Docker^] +
+   docker rest api java example - Google 検索
