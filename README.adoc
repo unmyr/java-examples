@@ -1,5 +1,9 @@
 == Java examples
 
+=== Coding styles
+
+* https://www.overops.com/blog/tabs-vs-spaces-how-they-write-java-in-google-twitter-mozilla-and-pied-piper/[Tabs vs Spaces: How They Write Java at Google, Twitter, Mozilla and Pied Piper - OverOps^]
+
 === VS-Code
 
 ==== Project configuration is not up-to-date with pom.xml, requires an update.
