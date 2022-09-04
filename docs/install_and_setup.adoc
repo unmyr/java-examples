@@ -1,0 +1,310 @@
+ifndef::leveloffset[]
+:toc: left
+:toclevels: 3
+endif::[]
+
+include::header.adoc[]
+
+== Install and setup
+
+=== Java
+
+==== Ubuntu 18.04 LTS
+
+. Search Java packages
++
+[source,console]
+----
+$ sudo apt search 'openjdk-[0-9]+-jre$'
+[sudo] password for guest:
+Sorting... Done
+Full Text Search... Done
+openjdk-11-jre/bionic-updates,bionic-security 11.0.11+9-0ubuntu2~18.04 amd64 [upgradable from: 11.0.6+10-1ubuntu1~18.04.1]
+  OpenJDK Java runtime, using Hotspot JIT
+
+openjdk-17-jre/bionic-updates 17+35-1~18.04 amd64
+  OpenJDK Java runtime, using Hotspot JIT
+
+openjdk-8-jre/bionic-updates,bionic-security 8u292-b10-0ubuntu1~18.04 amd64
+  OpenJDK Java runtime, using Hotspot JIT
+----
+
+. Install Java
++
+[source,console]
+.Install Java 8 on Ubuntu 18.04 LTS
+----
+sudo apt-get install openjdk-8-jdk
+----
+
+. Check which JDK-Versions are available on your system perform:
++
+[source,console]
+----
+$ sudo update-java-alternatives --list
+java-1.11.0-openjdk-amd64      1111       /usr/lib/jvm/java-1.11.0-openjdk-amd64
+java-1.8.0-openjdk-amd64       1081       /usr/lib/jvm/java-1.8.0-openjdk-amd64
+----
++
+[source,console]
+----
+$ java -version
+openjdk version "17.0.4" 2022-07-19
+OpenJDK Runtime Environment (build 17.0.4+8-Ubuntu-120.04)
+OpenJDK 64-Bit Server VM (build 17.0.4+8-Ubuntu-120.04, mixed mode, sharing)
+$ update-java-alternatives --list
+java-1.11.0-openjdk-amd64      1111       /usr/lib/jvm/java-1.11.0-openjdk-amd64
+java-1.17.0-openjdk-amd64      1711       /usr/lib/jvm/java-1.17.0-openjdk-amd64
+----
+
+. Make version 8 your default Java:
++
+you get something like this:
++
+[source,console]
+----
+$ sudo update-alternatives --config java
+There are 2 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-11-openjdk-amd64/bin/java      1111      auto mode
+  1            /usr/lib/jvm/java-11-openjdk-amd64/bin/java      1111      manual mode
+  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 2
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java to provide /usr/bin/java (java) in manual mode
+----
+
+. Repeat the previous operation with default Javac:
++
+[source,console]
+----
+$ sudo update-alternatives --config javac
+There are 2 choices for the alternative javac (providing /usr/bin/javac).
+
+  Selection    Path                                          Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-11-openjdk-amd64/bin/javac   1111      auto mode
+  1            /usr/lib/jvm/java-11-openjdk-amd64/bin/javac   1111      manual mode
+  2            /usr/lib/jvm/java-8-openjdk-amd64/bin/javac    1081      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 2
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javac to provide /usr/bin/javac (javac) in manual mode
+----
+
+. Check with `java -version` and `javac -version` that version 8 is the default JDK.
+you get something like this:
++
+[source,console]
+----
+$ java -version
+openjdk version "1.8.0_292"
+OpenJDK Runtime Environment (build 1.8.0_292-8u292-b10-0ubuntu1~18.04-b10)
+OpenJDK 64-Bit Server VM (build 25.292-b10, mixed mode)
+----
++
+[source,console]
+----
+$ javac -version
+javac 1.8.0_292
+----
+
+. Install Maven
++
+[source,console]
+----
+sudo apt-get update
+sudo apt install maven
+----
+
+. Check installed
++
+[source,console]
+----
+mvn -version
+----
+
+.References
+* https://www.geofis.org/en/install/install-on-linux/install-openjdk-8-on-ubuntu-trusty/[Install OpenJDK 8 on Ubuntu Trusty - GeoFIS^] +
+  apt install openjdk 8 ubuntu alternative - Google Search
+
+==== Ubuntu 20.04 LTS
+
+. Install Java 17 on Ubuntu 20.04 LTS
++
+[source,console]
+.Install Java 17 on Ubuntu 20.04 LTS
+----
+$ sudo apt install openjdk-17-jdk
+$ mvn -version
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 17.0.4, vendor: Private Build, runtime: /usr/lib/jvm/java-17-openjdk-amd64
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "5.10.16.3-microsoft-standard-wsl2", arch: "amd64", family: "unix"
+----
++
+[WARN]
+.Maven 3.6.3 not working on Ubuntu 20.04 LTS
+====
+[source,console]
+----
+$ sudo apt install openjdk-17-jdk
+$ mvn -version
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 17.0.4, vendor: Private Build, runtime: /usr/lib/jvm/java-17-openjdk-amd64
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "5.10.16.3-microsoft-standard-wsl2", arch: "amd64", family: "unix"
+$ mvn spring-boot:build-image
+[ERROR] Error executing Maven.
+[ERROR] java.lang.IllegalStateException: Unable to load cache item
+[ERROR] Caused by: Unable to load cache item
+[ERROR] Caused by: Could not initialize class com.google.inject.internal.cglib.core.$MethodWrapper
+----
+====
+
+. Install Maven
++
+[source,console]
+----
+sudo apt-get update
+sudo apt install maven
+----
+
+=== VS-Code
+
+ctrl + Shift + P
+
+----
+>Java: Configure Java Runtime
+----
+
+(workspaceでなく)WSL側に設定を加えると次の警告が消える。
+
+> Build path specifies execution environment JavaSE-1.8. There are no JREs installed in the workspace that are strictly compatible with this environment. 
+
+> The compiler compliance specified is 1.8 but a JRE 11 is used
+
+[source,json]
+.~/.vscode-server/data/Machine/settings.json
+----
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-1.8",
+      "path": "/usr/lib/jvm/java-8-openjdk-amd64",
+      "default":  true
+    },
+    {
+      "name": "JavaSE-11",
+      "path": "/usr/lib/jvm/java-11-openjdk-amd64/"
+    },
+  ]
+----
+
+.References
+* https://code.visualstudio.com/docs/java/java-project#_configure-runtime-for-projects[Configure Runtime for Projects | code.visualstudio.com^]
+
+=== Maven
+
+. Crete Project
++
+[source,console]
+----
+mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example.myapp -DartifactId=myapp
+----
+
+. Move to project folder.
++
+[source,console]
+----
+cd myapp/
+----
++
+[source,console]
+----
+myapp$ tree .
+.
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       └── com
+    │           └── example
+    │               └── myapp
+    │                   └── App.java
+    └── test
+        └── java
+            └── com
+                └── example
+                    └── myapp
+                        └── AppTest.java
+
+11 directories, 3 files
+----
+
+. Build
+
+. Run
++
+[source,console]
+----
+myapp$ cd target/classes/
+classes$ java com.example.myapp.App
+Hello World!
+----
+
+
+
+==== trouble shooting
+
+
+
+
+
+==== Java 8 向けにコンパイルする
+
+.Messages
+* Build path specifies execution environment J2SE-1.5. There are no JREs installed in the workspace that are strictly compatible with this environment. 
+* The compiler compliance specified is 1.5 but a JRE 1.8 is used
+
+[source,xml]
+----
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+----
+
+[source,xml]
+.Old style
+----
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+----
+
+* https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html[Apache Maven Compiler Plugin – Setting the -source and -target of the Java Compiler | maven.apache.org^]
+
+
+=== References
+
+// tag::reference[]
+* https://qiita.com/KevinFQ/items/e8363ad6123713815e68[よく使うMavenコマンド集 - Qiita^] +
+  maven build - Google 検索
+// end::reference[]
+
