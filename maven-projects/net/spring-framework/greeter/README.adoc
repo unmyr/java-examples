@@ -4,11 +4,11 @@
 +
 [source,console]
 ----
-$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.4 -DartifactId=greeter-using-spring-boot
+$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.4 -DartifactId=greeter
 ----
 +
 ----
-cd greeter-using-spring-boot
+cd greeter
 ----
 
 . Update pom.xml
@@ -203,7 +203,7 @@ $ mvn spring-boot:run
 ----
 $ mvn package
 ...
-[INFO] Building jar: .../greeter-using-spring-boot/target/greeter-using-spring-boot-1.0-SNAPSHOT.jar
+[INFO] Building jar: .../greeter/target/greeter-1.0-SNAPSHOT.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -217,7 +217,7 @@ $ mvn package
 ----
 $ mvn package spring-boot:repackage
 ...
-$ java -jar target/greeter-using-spring-boot-1.0-SNAPSHOT.jar
+$ java -jar target/greeter-1.0-SNAPSHOT.jar
 ....
 ----
 +
