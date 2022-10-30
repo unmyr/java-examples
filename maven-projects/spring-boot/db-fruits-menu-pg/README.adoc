@@ -1,0 +1,167 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of SpringBoot
+
+. Using https://start.spring.io/[spring initializr^] +
+  image:spring-initializr.png[]
+
+. Creating a new project, and go to the projects directory.
++
+[source,shell]
+----
+unzip db-fruits-menu-pg.zip
+cd db-fruits-menu-pg
+----
+
+. Update pom.xml
+
+* Change Java Version to 17
+* Dependency
+** Add `spring-boot-starter-web`
+** Add `spring-boot-starter-data-jpa`
+** Add `postgresql`
+** Add `maven-surefire-plugin`
+
+. Add `src/main/resources/application.properties`
++
+[source,properties]
+.src/main/resources/application.properties
+----
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/fruits
+spring.datasource.username=xxxxxxxxxxx
+spring.datasource.password=xxxxxxxxxxx
+----
+
+* Generate application.properties
++
+[source,shell]
+..env
+----
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="***********"
+ADDITIONAL_USER="xxxxxxxxxxx"
+ADDITIONAL_PASSWORD="***********"
+----
++
+[source,shell]
+----
+./gen_prop.sh
+----
+
+. Run test
++
+[source,shell]
+----
+mvn test
+----
+
+. Test server
++
+[source,console]
+----
+mvn spring-boot:run
+----
++
+Open a new terminal and run the following command:
++
+[source,console]
+----
+$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    }
+]
+----
+
+. Make a package
++
+[source,shell]
+----
+mvn package
+----
+
+. Generate jar file
++
+----
+$ mvn package spring-boot:repackage
+...
+$ java -jar target/db-fruits-menu-pg-0.0.1-SNAPSHOT.jar
+....
+----
++
+----
+$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    }
+]
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+mvn clean
+----
+
+=== Build docker image
+
+. Start the docker service (if not running)
++
+[source,console]
+----
+$ sudo service docker start
+----
+
+. Build a docker image
++
+[source,console]
+----
+$ mvn spring-boot:build-image
+----
+
+== References
+
+.Spring Initializr
+* https://start.spring.io/[Spring Initializr^] 
+* https://maven.apache.org/guides/index.html[Official Apache Maven documentation^]
+* https://docs.spring.io/spring-boot/docs/2.7.5/maven-plugin/reference/html/[Spring Boot Maven Plugin Reference Guide^]
+* https://docs.spring.io/spring-boot/docs/2.7.5/maven-plugin/reference/html/#build-image[Create an OCI image^]
+
+.Dependency
+* https://mvnrepository.com/artifact/org.postgresql/postgresql[Maven Repository: org.postgresql » postgresql^]
+** https://stackoverflow.com/questions/73554099/cannot-load-driver-class-org-postgresql-driver[java - Cannot load driver class: org.postgresql.Driver - Stack Overflow^]
+* https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin[Maven Repository: org.apache.maven.plugins » maven-surefire-plugin^]
+
+.Apps
+* https://intellectual-curiosity.tokyo/2019/04/21/spring-boot%e3%81%a7%e3%83%87%e3%83%bc%e3%82%bf%e3%83%99%e3%83%bc%e3%82%b9%e3%81%ab%e3%82%a2%e3%82%af%e3%82%bb%e3%82%b9%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95/[Spring Bootでデータベース（PostgreSQL）にアクセスする方法 - 知的好奇心^] +
+  spring findAll postgresql timestamp - Google Search
