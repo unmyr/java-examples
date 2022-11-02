@@ -37,6 +37,14 @@ public class FruitsMenu {
     this.name = name;
   }
 
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
+
   public Timestamp getModTime() {
     return modTime;
   }

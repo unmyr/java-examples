@@ -1,7 +1,0 @@
-# Maven
-.mvn
-target/
-
-# Secret files
-.env
-src/main/resources/application.properties

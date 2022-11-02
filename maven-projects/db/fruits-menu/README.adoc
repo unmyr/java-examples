@@ -5,14 +5,17 @@ endif::[]
 == Example of SpringBoot
 
 . Using https://start.spring.io/[spring initializr^] +
-  image:spring-initializr.png[]
+  Add Spring Web, Spring Data JPA, PostgreSQL Driver and H2 Database
+  image:spring-initializr-01.png[] +
+  image:spring-initializr-02.png[]
 
 . Creating a new project, and go to the projects directory.
 +
 [source,shell]
 ----
-unzip db-fruits-menu-pg.zip
-cd db-fruits-menu-pg
+unzip example.zip
+mv fruits-menu
+cd fruits-menu
 ----
 
 . Update pom.xml
@@ -42,27 +45,27 @@ spring.datasource.password=xxxxxxxxxxx
 ----
 POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="***********"
-ADDITIONAL_USER="xxxxxxxxxxx"
+ADDITIONAL_USER="***********"
 ADDITIONAL_PASSWORD="***********"
 ----
 +
 [source,shell]
 ----
-./gen_prop.sh
+./gen_app_props.sh
 ----
 
 . Run test
 +
 [source,shell]
 ----
-mvn test
+./mvnw test
 ----
 
 . Test server
 +
 [source,console]
 ----
-mvn spring-boot:run
+./mvnw spring-boot:run
 ----
 +
 Open a new terminal and run the following command:
@@ -74,16 +77,19 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
     {
         "id": 1,
         "name": "Apple",
+        "price": 100,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     },
     {
         "id": 2,
         "name": "Banana",
+        "price": 120,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     },
     {
         "id": 3,
         "name": "Orange",
+        "price": 110,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     }
 ]
@@ -93,15 +99,15 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
 +
 [source,shell]
 ----
-mvn package
+./mvnw package
 ----
 
 . Generate jar file
 +
 ----
-$ mvn package spring-boot:repackage
+$ ./mvnw package spring-boot:repackage
 ...
-$ java -jar target/db-fruits-menu-pg-0.0.1-SNAPSHOT.jar
+$ java -jar target/fruits-menu-0.0.1-SNAPSHOT.jar
 ....
 ----
 +
@@ -111,16 +117,19 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
     {
         "id": 1,
         "name": "Apple",
+        "price": 100,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     },
     {
         "id": 2,
         "name": "Banana",
+        "price": 120,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     },
     {
         "id": 3,
         "name": "Orange",
+        "price": 110,
         "modTime": "2022-09-24T07:10:53.324+00:00"
     }
 ]
@@ -130,7 +139,7 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
 +
 [source,console]
 ----
-mvn clean
+./mvnw clean
 ----
 
 === Build docker image
@@ -139,14 +148,85 @@ mvn clean
 +
 [source,console]
 ----
-$ sudo service docker start
+sudo service docker start
 ----
 
 . Build a docker image
 +
+[source,shell]
+----
+./mvnw spring-boot:build-image
+----
++
+[source,console]
+.Results
+----
+$ docker image ls --filter='reference=fruits-menu'
+REPOSITORY    TAG              IMAGE ID       CREATED        SIZE
+fruits-menu   0.0.1-SNAPSHOT   3805ebdbca13   42 years ago   296MB
+----
+
+. Create `.env.postgres` +
+Defining properties with double quotes fails.
++
+[source,plaintext]
+----
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=************
+ADDITIONAL_USER=db_user1
+ADDITIONAL_PASSWORD=************
+----
+
+. Create `.env.spring` +
+Defining properties with double quotes fails.
++
+[source,plaintext]
+----
+SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/fruits
+SPRING_DATASOURCE_USERNAME=db_user1
+SPRING_DATASOURCE_PASSWORD==************
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+----
+
+. Start a container
++
+[source,shell]
+----
+docker-compose up -d
+----
+
+. Send a test request
++
 [source,console]
 ----
-$ mvn spring-boot:build-image
+$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "price": 100,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "price": 120,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "price": 110,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    }
+]
+----
+
+. Stop a container
++
+[source,shell]
+----
+docker-compose up -d
 ----
 
 == References

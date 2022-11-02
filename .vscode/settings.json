@@ -6,6 +6,7 @@
   "java.configuration.updateBuildConfiguration": "automatic",
   "cSpell.words": [
     "adoc",
+    "assertj",
     "autoconfigure",
     "Autowired",
     "cglib",
@@ -32,6 +33,7 @@
     "jdbc",
     "leveloffset",
     "lrwxrwxrwx",
+    "mvnw",
     "Osipov",
     "println",
     "Qiita",
