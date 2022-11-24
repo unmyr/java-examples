@@ -8,9 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.FruitsMenuRepository;
-import com.example.FruitsMenu;
-
 @DataJpaTest
 public class FruitsMenuRepositoryTest {
   @Autowired
