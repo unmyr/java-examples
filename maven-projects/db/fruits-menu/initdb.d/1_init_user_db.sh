@@ -1,7 +1,7 @@
 #!/bin/bash
 DB_NAME="fruits"
 
-psql -U ${POSTGRES_USER} <<EOF
+sudo -u postgres psql -U ${POSTGRES_USER} <<EOF
 CREATE ROLE ${ADDITIONAL_USER} LOGIN PASSWORD '${ADDITIONAL_PASSWORD}';
 CREATE DATABASE ${DB_NAME};
 
