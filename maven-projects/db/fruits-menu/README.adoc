@@ -54,6 +54,14 @@ ADDITIONAL_PASSWORD="***********"
 ./gen_app_props.sh
 ----
 
+* Setup database
++
+[source,console]
+----
+sudo -u postgres initdb.d/1_init_user_db.sh
+sudo -u postgres psql -U postgres -f ./initdb.d/2_create_tables.sql
+----
+
 . Run test
 +
 [source,shell]
@@ -72,27 +80,35 @@ Open a new terminal and run the following command:
 +
 [source,console]
 ----
-$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+$ curl -s -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 120}' | python -m json.tool
+{
+    "message": "OK"
+}
+$ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
 [
     {
         "id": 1,
         "name": "Apple",
         "price": 100,
-        "modTime": "2022-09-24T07:10:53.324+00:00"
+        "modTime": "2022-11-24T14:55:40.153+00:00"
     },
     {
         "id": 2,
         "name": "Banana",
         "price": 120,
-        "modTime": "2022-09-24T07:10:53.324+00:00"
+        "modTime": "2022-11-24T14:55:40.153+00:00"
     },
     {
         "id": 3,
         "name": "Orange",
         "price": 110,
-        "modTime": "2022-09-24T07:10:53.324+00:00"
+        "modTime": "2022-11-24T14:55:40.153+00:00"
     }
 ]
+$ curl -s -X DELETE http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
+{
+    "message": "OK"
+}
 ----
 
 . Make a package

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FruitsMenuRepository extends JpaRepository<FruitsMenu, Integer>{
-  
+  Integer deleteByName(String name); 
 }

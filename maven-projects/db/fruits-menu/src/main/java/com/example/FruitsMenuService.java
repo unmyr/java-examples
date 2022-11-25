@@ -12,7 +12,20 @@ public class FruitsMenuService {
   @Autowired
   FruitsMenuRepository repository;
 
+  public 
+  void add(String fruitName, int price) {
+    FruitsMenu fruitItem = new FruitsMenu();
+    fruitItem.setName(fruitName);
+    fruitItem.setPrice(price);
+    repository.save(fruitItem);
+  }
+
   public List<FruitsMenu> findAll() {
     return repository.findAll();
+  }
+
+  @Transactional
+  void deleteByName(String fruitName) {
+    repository.deleteByName(fruitName);
   }
 }
