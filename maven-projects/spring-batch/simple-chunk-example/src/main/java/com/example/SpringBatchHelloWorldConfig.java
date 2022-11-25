@@ -1,38 +1,87 @@
 package com.example;
 
-import java.util.List;
+import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.batch.item.Chunk;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.lang.NonNull;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
-@EnableBatchProcessing
+@EnableBatchProcessing(dataSourceRef = "batchDataSource", transactionManagerRef = "batchTransactionManager")
 public class SpringBatchHelloWorldConfig {
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    @Bean("batchDataSource")
+    @ConfigurationProperties("app.datasource")
+    public DataSource dataSource() {
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder(
+        ).addScript(
+            "classpath:org/springframework/batch/core/schema-drop-h2.sql"
+        ).addScript(
+            "classpath:org/springframework/batch/core/schema-h2.sql"
+        );
+        return builder.setType(EmbeddedDatabaseType.H2).build();
+    }
 
     @Bean
-    public Step step1() {
-        return stepBuilderFactory.get("step1")
-                .<Employee, Employee>chunk(2)
+    public EntityManagerFactory entityManagerFactory() {
+  
+      HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+      vendorAdapter.setGenerateDdl(true);
+  
+      LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+      factory.setJpaVendorAdapter(vendorAdapter);
+      factory.setPackagesToScan("com.acme.domain");
+      factory.setDataSource(dataSource());
+      factory.afterPropertiesSet();
+  
+      return factory.getObject();
+    }
+
+    @Bean("batchTransactionManager")
+    public PlatformTransactionManager transactionManager() {
+  
+      JpaTransactionManager txManager = new JpaTransactionManager();
+      txManager.setEntityManagerFactory(entityManagerFactory());
+      return txManager;
+    }
+
+    Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+           
+        return properties;
+    }
+
+    @Bean
+    public Step step1(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("step1", jobRepository)
+                .<Employee, Employee>chunk(2, transactionManager)
                 .reader(employeeItemReader())
                 .processor(employeeItemProcessor())
                 .writer(employeeItemWriter())
@@ -40,10 +89,8 @@ public class SpringBatchHelloWorldConfig {
     }
 
     @Bean
-    public Job listEmployeesJob(Step step1) throws Exception {
-        return jobBuilderFactory.get("listEmployeesJob")
-                .start(step1)
-                .build();
+    public Job listEmployeesJob(JobRepository jobRepository, Step step1) throws Exception {
+        return new JobBuilder("listEmployeesJob", jobRepository).start(step1).build();
     }
 
     @Bean
@@ -70,7 +117,7 @@ public class SpringBatchHelloWorldConfig {
     ItemProcessor<Employee, Employee> employeeItemProcessor() {
         return new ItemProcessor<Employee, Employee>() {
             @Override
-            public Employee process(Employee employee) throws Exception {
+            public Employee process(@NonNull Employee employee) throws Exception {
                 employee.setFirstName(employee.getFirstName().toUpperCase());
                 employee.setLastName(employee.getLastName().toUpperCase());
                 return employee;
@@ -82,7 +129,7 @@ public class SpringBatchHelloWorldConfig {
     ItemWriter<Employee> employeeItemWriter() {
         return new ItemWriter<Employee>() {
             @Override
-            public void write(List<? extends Employee> employeesList) throws Exception {
+            public void write(@NonNull Chunk<? extends Employee> employeesList) throws Exception {
                 for (Employee employee : employeesList) {
                     System.out.println("Name: "
                             + employee.getFirstName() + " "

@@ -1,5 +1,6 @@
 package com.example;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -14,6 +15,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
 /**
  * Hello world!
  *
@@ -22,6 +26,8 @@ public class App
 {
     public static void main( String[] args )
     {
+        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.ERROR);
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringBatchHelloWorldConfig.class);
 
         JobLauncher jobLauncher = context.getBean(JobLauncher.class);
