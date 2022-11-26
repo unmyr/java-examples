@@ -1,5 +1,7 @@
 package com.example;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class FruitsMenuServiceImpl implements FruitsMenuService {
     FruitsMenu fruitItem = new FruitsMenu();
     fruitItem.setName(fruitName);
     fruitItem.setPrice(price);
+    fruitItem.setModTime(Timestamp.from(Instant.now()));
     repository.save(fruitItem);
   }
 
@@ -37,6 +40,7 @@ public class FruitsMenuServiceImpl implements FruitsMenuService {
   public void setPriceByName(String fruitName, int price) {
     FruitsMenu fruitItem = repository.findOneByName(fruitName);
     fruitItem.setPrice(price);
+    fruitItem.setModTime(Timestamp.from(Instant.now()));
     repository.save(fruitItem);
   }
 
