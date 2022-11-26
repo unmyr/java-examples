@@ -22,8 +22,13 @@ public class FruitsMenuController {
   FruitsMenuService service;
 
   @RequestMapping(value="/fruits", method=RequestMethod.GET)
-  public List<FruitsMenu> index() {
+  public List<FruitsMenu> list() {
     return service.findAll();
+  }
+
+  @RequestMapping(value="/fruits/{fruitName}", method=RequestMethod.GET)
+  public FruitsMenu show(@PathVariable("fruitsName") String fruitName) {
+    return service.findOneByName(fruitName);
   }
 
   @PostMapping(value="/fruits/{fruitsName}", produces="application/json")
