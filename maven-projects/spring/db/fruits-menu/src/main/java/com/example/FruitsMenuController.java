@@ -27,7 +27,7 @@ public class FruitsMenuController {
   }
 
   @RequestMapping(value="/fruits/{fruitName}", method=RequestMethod.GET)
-  public FruitsMenu show(@PathVariable("fruitsName") String fruitName) {
+  public FruitsMenu show(@PathVariable("fruitName") String fruitName) {
     return service.findOneByName(fruitName);
   }
 
