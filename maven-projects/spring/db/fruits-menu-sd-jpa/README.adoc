@@ -5,17 +5,26 @@ endif::[]
 == Example of SpringBoot
 
 . Using https://start.spring.io/[spring initializr^] +
-  Add Spring Web, Spring Data JPA, PostgreSQL Driver and H2 Database
-  image:spring-initializr-01.png[] +
-  image:spring-initializr-02.png[]
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: fruits-menu-sd-jpa
+Name:: fruits-menu
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
++
+Add Spring Web, Spring Data JPA, PostgreSQL Driver and H2 Database
+image:spring-initializr-01.png[] +
+image:spring-initializr-02.png[]
 
 . Creating a new project, and go to the projects directory.
 +
 [source,shell]
 ----
-unzip example.zip
-mv fruits-menu
-cd fruits-menu
+unzip fruits-menu-sd-jpa.zip
+cd fruits-menu-sd-jpa
 ----
 
 . Update pom.xml
@@ -289,3 +298,6 @@ docker-compose up -d
 .Testing
 * https://www.baeldung.com/spring-testing-separate-data-source[Configuring Separate Spring DataSource for Tests | Baeldung^] +
   jpa application-test.properties - Google Search
+
+.Misc
+* https://thorben-janssen.com/migrating-jpa-2-x-to-3-0/[Migrating from JPA 2.x to 3.0 - Thorben Janssen^]
