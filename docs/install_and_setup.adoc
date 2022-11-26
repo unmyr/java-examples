@@ -280,6 +280,17 @@ ctrl + Shift + P
 .References
 * https://code.visualstudio.com/docs/java/java-project#_configure-runtime-for-projects[Configure Runtime for Projects | code.visualstudio.com^]
 
+==== Xxx.java is a non-project file, only syntax errors are reported
+
+Try cleaning the Java language server workspace:
+
+. CMD+SHIFT+P (CTRL+SHIFT+P ON WINDOWS) to show command palette
+. Choose "Java: Clean the Java language server workspace"
+. Restart and Delete
+
+.References
+* https://stackoverflow.com/questions/61826895/how-to-avoid-vs-code-warning-myfile-java-is-a-non-project-file-only-syntax[How to avoid VS Code warning: "[MyFile\].java is a non-project file, only syntax errors are reported" - Stack Overflow^]
+
 === Maven
 
 . Crete Project
@@ -329,13 +340,7 @@ classes$ java com.example.myapp.App
 Hello World!
 ----
 
-
-
 ==== trouble shooting
-
-
-
-
 
 ==== Java 8 向けにコンパイルする
 
