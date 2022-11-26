@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,16 +19,8 @@ public class FruitsMenuControllerTest {
   @Autowired
 	private MockMvc mockMvc;
 
-  // @Test
-	// public void findAll() throws Exception {
-	// 	this.mockMvc.perform(
-  //     get("/api/fruits").accept(MediaType.APPLICATION_JSON)
-  //   ).andDo(print()).andExpect(status().isOk()).andExpect(
-  //     jsonPath("$[0].name").value("Apple")
-  //   );
-  // }
   @Test
-	public void add() throws Exception {
+	public void findAll() throws Exception {
 		this.mockMvc.perform(
       MockMvcRequestBuilders.post(
         "/api/fruits/Apple"
@@ -80,6 +73,16 @@ public class FruitsMenuControllerTest {
       )
     ).andDo(print()).andExpect(status().isOk()).andExpect(
       jsonPath("$.length()").value(3)
+    ).andExpect(
+      jsonPath("$[*].name").value(containsInAnyOrder("Apple", "Banana", "Orange"))
+    ).andExpect(
+      jsonPath("$[*].price").value(containsInAnyOrder(100, 120, 110))
+    ).andExpect(
+      jsonPath("$.[?(@.name == \"Apple\" && @.price == 100)]").exists()
+    ).andExpect(
+      jsonPath("$.[?(@.name == \"Banana\" && @.price == 120)]").exists()
+    ).andExpect(
+      jsonPath("$.[?(@.name == \"Orange\" && @.price == 110)]").exists()
     );
   }
 
@@ -93,7 +96,7 @@ public class FruitsMenuControllerTest {
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":99}]"
+        "{\"price\":99}"
       )
     ).andDo(print()).andExpect(status().isOk()).andExpect(
       jsonPath("$.message").value("OK")
@@ -107,7 +110,7 @@ public class FruitsMenuControllerTest {
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":101}]"
+        "{\"price\":101}"
       )
     ).andDo(print()).andExpect(status().isOk()).andExpect(
       jsonPath("$.message").value("OK")
@@ -138,7 +141,7 @@ public class FruitsMenuControllerTest {
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":500}]"
+        "{\"price\":500}"
       )
     ).andDo(print()).andExpect(status().isOk()).andExpect(
       jsonPath("$.message").value("OK")
