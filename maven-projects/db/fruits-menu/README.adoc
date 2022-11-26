@@ -77,6 +77,8 @@ sudo -u postgres psql -U postgres -f ./initdb.d/2_create_tables.sql
 ----
 +
 Open a new terminal and run the following command:
+
+* POST
 +
 [source,console]
 ----
@@ -84,6 +86,22 @@ $ curl -s -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: appli
 {
     "message": "OK"
 }
+----
+
+* PUT
++
+[source,console]
+----
+$ curl -s -X PUT http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 110}' | python -m json.tool
+{
+    "message": "OK"
+}
+----
+
+* GET
++
+[source,console]
+----
 $ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
 [
     {
@@ -105,6 +123,12 @@ $ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
         "modTime": "2022-11-24T14:55:40.153+00:00"
     }
 ]
+----
+
+* DELETE
++
+[source,console]
+----
 $ curl -s -X DELETE http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
 {
     "message": "OK"
@@ -261,3 +285,7 @@ docker-compose up -d
 .Apps
 * https://intellectual-curiosity.tokyo/2019/04/21/spring-boot%e3%81%a7%e3%83%87%e3%83%bc%e3%82%bf%e3%83%99%e3%83%bc%e3%82%b9%e3%81%ab%e3%82%a2%e3%82%af%e3%82%bb%e3%82%b9%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95/[Spring Bootでデータベース（PostgreSQL）にアクセスする方法 - 知的好奇心^] +
   spring findAll postgresql timestamp - Google Search
+
+.Testing
+* https://www.baeldung.com/spring-testing-separate-data-source[Configuring Separate Spring DataSource for Tests | Baeldung^] +
+  jpa application-test.properties - Google Search

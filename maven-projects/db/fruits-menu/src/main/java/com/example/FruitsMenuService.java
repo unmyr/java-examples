@@ -24,6 +24,12 @@ public class FruitsMenuService {
     return repository.findAll();
   }
 
+  void setPriceByName(String fruitName, int price) {
+    FruitsMenu fruitItem = repository.findOneByName(fruitName);
+    fruitItem.setPrice(price);
+    repository.save(fruitItem);
+  }
+
   @Transactional
   void deleteByName(String fruitName) {
     repository.deleteByName(fruitName);

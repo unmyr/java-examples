@@ -12,6 +12,7 @@
     "assertj",
     "autoconfigure",
     "Autowired",
+    "Baeldung",
     "cglib",
     "classpath",
     "codehaus",

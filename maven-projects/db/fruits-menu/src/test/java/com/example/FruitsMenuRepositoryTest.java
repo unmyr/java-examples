@@ -26,4 +26,15 @@ public class FruitsMenuRepositoryTest {
     java.util.List<FruitsMenu> fruits = this.repository.findAll();
     assertThat(fruits.get(0).getName()).isEqualTo("apple");
   }
+
+  @Test
+  public void findOneByName() {
+    FruitsMenu fruitsMenu = new FruitsMenu();
+    fruitsMenu.setName("apple");
+    fruitsMenu.setPrice(100);
+    fruitsMenu.setModTime(Timestamp.valueOf("1999-12-31 23:59:59.999"));
+    this.entityManager.persist(fruitsMenu);
+    FruitsMenu fruitItem = this.repository.findOneByName("apple");
+    assertThat(fruitItem.getPrice()).isEqualTo(100);
+  }
 }
