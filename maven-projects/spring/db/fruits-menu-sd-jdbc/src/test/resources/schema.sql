@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS fruits_menu CASCADE;
-CREATE TABLE fruits_menu (
+CREATE TABLE IF NOT EXISTS fruits_menu (
   id SERIAL PRIMARY KEY,
   name VARCHAR(16) UNIQUE,
   price INTEGER,

@@ -1,11 +1,14 @@
 package com.example;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -19,7 +22,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql({"/schema.sql", "/test-data.sql"})
 public class FruitsMenuControllerTest {
   @Autowired
+  private JdbcTemplate jdbcTemplate;
+  @Autowired
 	private MockMvc mockMvc;
+
+  @AfterEach
+  public void tearDown() {
+    JdbcTestUtils.deleteFromTables(jdbcTemplate, "fruits_menu");
+  }
 
   @Test
 	public void findAll() throws Exception {
