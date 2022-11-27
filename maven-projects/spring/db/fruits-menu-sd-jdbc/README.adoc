@@ -1,0 +1,322 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of SpringBoot
+
+. Using https://start.spring.io/[spring initializr^]
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: fruits-menu-sd-jdbc
+Name:: fruits-menu
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
++
+Add Dependencies for `Spring Web`, `Spring Data JDBC`, `PostgreSQL Driver` and `H2 Database`
+image:spring-initializr-01.png[] +
+image:spring-initializr-02.png[]
+
+. Creating a new project, and go to the projects directory.
++
+[source,shell]
+----
+unzip fruits-menu-sd-jdbc.zip
+cd fruits-menu-sd-jdbc
+----
+
+. Update pom.xml
+
+* Change Java Version to 17
+* Dependency
+** Add `spring-boot-starter-web`
+** Add `spring-boot-starter-data-jpa`
+** Add `postgresql`
+** Add `maven-surefire-plugin`
+
+. Add `src/main/resources/application.properties`
++
+[source,properties]
+.src/main/resources/application.properties
+----
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/fruits
+spring.datasource.username=xxxxxxxxxxx
+spring.datasource.password=xxxxxxxxxxx
+----
+
+* Generate application.properties
++
+[source,shell]
+..env
+----
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="***********"
+ADDITIONAL_USER="***********"
+ADDITIONAL_PASSWORD="***********"
+----
++
+[source,shell]
+----
+./gen_app_props.sh
+----
+
+* Setup database
++
+[source,console]
+----
+sudo -u postgres initdb.d/1_init_user_db.sh
+sudo -u postgres psql -U postgres -f ./initdb.d/2_create_tables.sql
+----
+
+. Run test
++
+[source,shell]
+----
+./mvnw test
+----
+
+. Test server
++
+[source,console]
+----
+./mvnw spring-boot:run
+----
++
+Open a new terminal and run the following command:
+
+* POST
++
+[source,console]
+----
+$ curl -s -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 120}' | python -m json.tool
+{
+    "message": "OK"
+}
+----
+
+* PUT
++
+[source,console]
+----
+$ curl -s -X PUT http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 110}' | python -m json.tool
+{
+    "message": "OK"
+}
+----
+
+* GET
++
+[source,console]
+.Get all items
+----
+$ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "price": 100,
+        "modTime": "2022-11-24T14:55:40.153+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "price": 120,
+        "modTime": "2022-11-24T14:55:40.153+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "price": 110,
+        "modTime": "2022-11-24T14:55:40.153+00:00"
+    }
+]
+----
+
+* GET
++
+[source,console]
+.Get a item
+----
+$ curl -s http://localhost:8080/api/fruits/Apple -H 'Accept: application/json' | python -m json.tool
+{
+    "id": 1,
+    "name": "Apple",
+    "price": 100,
+    "modTime": "2022-11-24T14:55:40.153+00:00"
+}
+$ curl -s http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
+{
+    "timestamp": "2022-11-27T14:32:42.966+00:00",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/api/fruits/Peach"
+}
+----
+
+* DELETE
++
+[source,console]
+----
+$ curl -s -X DELETE http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
+{
+    "message": "OK"
+}
+----
+
+. Make a package
++
+[source,shell]
+----
+./mvnw package
+----
+
+. Generate jar file
++
+----
+$ ./mvnw package spring-boot:repackage
+...
+$ java -jar target/fruits-menu-0.0.1-SNAPSHOT.jar
+....
+----
++
+----
+$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "price": 100,
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "price": 120,
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "price": 110,
+        "modTime": "2022-09-24T07:10:53.324+00:00"
+    }
+]
+----
+
+. cleans up artifacts created by prior builds
++
+[source,console]
+----
+./mvnw clean
+----
+
+=== Build docker image
+
+. Start the docker service (if not running)
++
+[source,console]
+----
+sudo service docker start
+----
+
+. Build a docker image
++
+[source,shell]
+----
+./mvnw spring-boot:build-image
+----
++
+[source,console]
+.Results
+----
+$ docker image ls --filter='reference=fruits-menu'
+REPOSITORY    TAG              IMAGE ID       CREATED        SIZE
+fruits-menu   0.0.1-SNAPSHOT   3805ebdbca13   42 years ago   296MB
+----
+
+. Create `.env.postgres` +
+Defining properties with double quotes fails.
++
+[source,plaintext]
+----
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=************
+ADDITIONAL_USER=db_user1
+ADDITIONAL_PASSWORD=************
+----
+
+. Create `.env.spring` +
+Defining properties with double quotes fails.
++
+[source,plaintext]
+----
+SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/fruits
+SPRING_DATASOURCE_USERNAME=db_user1
+SPRING_DATASOURCE_PASSWORD==************
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+----
+
+. Start a container
++
+[source,shell]
+----
+docker-compose up -d
+----
+
+. Send a test request
++
+[source,console]
+----
+$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "price": 100,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "price": 120,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    },
+    {
+        "id": 3,
+        "name": "Orange",
+        "price": 110,
+        "modTime": "2022-11-02T13:31:24.336+00:00"
+    }
+]
+----
+
+. Stop a container
++
+[source,shell]
+----
+docker-compose up -d
+----
+
+== References
+
+.Spring Initializr
+* https://start.spring.io/[Spring Initializr^] 
+* https://maven.apache.org/guides/index.html[Official Apache Maven documentation^]
+* https://docs.spring.io/spring-boot/docs/2.7.5/maven-plugin/reference/html/[Spring Boot Maven Plugin Reference Guide^]
+* https://docs.spring.io/spring-boot/docs/2.7.5/maven-plugin/reference/html/#build-image[Create an OCI image^]
+
+.Dependency
+* https://mvnrepository.com/artifact/org.postgresql/postgresql[Maven Repository: org.postgresql » postgresql^]
+** https://stackoverflow.com/questions/73554099/cannot-load-driver-class-org-postgresql-driver[java - Cannot load driver class: org.postgresql.Driver - Stack Overflow^]
+* https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin[Maven Repository: org.apache.maven.plugins » maven-surefire-plugin^]
+
+.Apps
+* https://intellectual-curiosity.tokyo/2019/04/21/spring-boot%e3%81%a7%e3%83%87%e3%83%bc%e3%82%bf%e3%83%99%e3%83%bc%e3%82%b9%e3%81%ab%e3%82%a2%e3%82%af%e3%82%bb%e3%82%b9%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95/[Spring Bootでデータベース（PostgreSQL）にアクセスする方法 - 知的好奇心^] +
+  spring findAll postgresql timestamp - Google Search
+
+.Testing
+* https://www.baeldung.com/spring-testing-separate-data-source[Configuring Separate Spring DataSource for Tests | Baeldung^] +
+  jpa application-test.properties - Google Search
