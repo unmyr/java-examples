@@ -27,15 +27,6 @@ unzip fruits-menu-sd-jdbc.zip
 cd fruits-menu-sd-jdbc
 ----
 
-. Update pom.xml
-
-* Change Java Version to 17
-* Dependency
-** Add `spring-boot-starter-web`
-** Add `spring-boot-starter-data-jpa`
-** Add `postgresql`
-** Add `maven-surefire-plugin`
-
 . Add `src/main/resources/application.properties`
 +
 [source,properties]
@@ -65,7 +56,7 @@ ADDITIONAL_PASSWORD="***********"
 
 * Setup database
 +
-[source,console]
+[source,shell]
 ----
 sudo -u postgres initdb.d/1_init_user_db.sh
 sudo -u postgres psql -U postgres -f ./initdb.d/2_create_tables.sql
@@ -80,7 +71,7 @@ sudo -u postgres psql -U postgres -f ./initdb.d/2_create_tables.sql
 
 . Test server
 +
-[source,console]
+[source,shell]
 ----
 ./mvnw spring-boot:run
 ----
@@ -208,7 +199,7 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
 
 . cleans up artifacts created by prior builds
 +
-[source,console]
+[source,shell]
 ----
 ./mvnw clean
 ----
@@ -217,7 +208,7 @@ $ curl -s http://localhost:8080/api/lists | python3 -m json.tool
 
 . Start the docker service (if not running)
 +
-[source,console]
+[source,shell]
 ----
 sudo service docker start
 ----
