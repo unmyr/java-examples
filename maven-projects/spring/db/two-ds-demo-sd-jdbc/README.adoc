@@ -1,0 +1,42 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of SpringBoot
+
+. Using https://start.spring.io/[spring initializr^]
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: two-ds-demo-sd-jdbc
+Name:: two-ds-demo
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
++
+Add Dependencies for `Spring Web`, `Spring Data JDBC`, `PostgreSQL Driver` and `H2 Database`
+
+. Creating a new project, and go to the projects directory.
++
+[source,shell]
+----
+unzip two-ds-demo-sd-jdbc.zip
+cd two-ds-demo-sd-jdbc
+----
+
+. Setup database
++
+[source,shell]
+----
+sudo -u postgres initdb.d/1_init_user_db.sh
+----
+
+=== Cleanup
+
+. Drop database
++
+[source,shell]
+----
+./db.sh drop
+----
