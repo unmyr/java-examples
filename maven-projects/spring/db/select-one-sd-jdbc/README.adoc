@@ -1,0 +1,49 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of SpringBoot
+
+. Using https://start.spring.io/[spring initializr^] +
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: select-one-sd-jdbc
+Name:: one
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
++
+Add Dependencies for Spring Data JPA, PostgreSQL Driver and H2 Database
+
+. Create `application.properties`
++
+[source,shell]
+----
+cat > src/main/resources/application.properties<<EOF
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/your-db-name
+spring.datasource.username=***********
+spring.datasource.password=***********
+EOF
+----
+
+. Run command
++
+[source,shell]
+----
+./mvnw spring-boot:run
+----
+
+. Package it
++
+[source,shell]
+----
+./mvnw package
+----
++
+[source,shell]
+----
+java -jar target/select-one-sd-jdbc-0.0.1-SNAPSHOT.jar
+----
