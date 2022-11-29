@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,46 +28,47 @@ public class FruitsMenuController {
   }
 
   @RequestMapping(value="/fruits/{fruitName}", method=RequestMethod.GET)
-  public FruitsMenu show(@PathVariable("fruitName") String fruitName) {
-    return service.findOneByName(fruitName).orElseThrow(
-      () -> new RuntimeException("Fruits not found")
-    );
+  public ResponseEntity<FruitsMenu> show(@PathVariable("fruitName") String fruitName) {
+    try {
+      return new ResponseEntity<FruitsMenu>(
+        service.findOneByName(fruitName).get(),
+        HttpStatus.OK
+      );
+    } catch(NoSuchElementException ex) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PutMapping(value="/fruits/{fruitsName}", produces="application/json")
-  public ResponseEntity<StringResponse> updatePrice(@PathVariable("fruitsName") String fruitsName, @RequestBody FruitsMenuAddPayload priceItem) {
-    try {
-      service.setPriceByName(fruitsName, priceItem.getPrice());
-    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
-      return new ResponseEntity<StringResponse>(
-        new StringResponse(ex.getCause().toString()), HttpStatus.CONFLICT
-      );
+  public ResponseEntity<?> updatePrice(@PathVariable("fruitsName") String fruitsName, @RequestBody FruitsMenuAddPayload priceItem) {
+    int count = service.setPriceByName(fruitsName, priceItem.getPrice());
+    if (count > 0) {
+      return ResponseEntity.noContent().build();
     }
-    return new ResponseEntity<StringResponse>(
-      new StringResponse("OK"), HttpStatus.OK
-    );
+    return ResponseEntity.notFound().build();
   }
 
-  @PostMapping(value="/fruits/{fruitsName}", produces="application/json")
-  public ResponseEntity<StringResponse> add(@PathVariable("fruitsName") String fruitsName, @RequestBody FruitsMenuAddPayload priceItem) {
-    try {
-      service.add(fruitsName, priceItem.getPrice());
-    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
-      return new ResponseEntity<StringResponse>(
-        new StringResponse(ex.getCause().toString()), HttpStatus.CONFLICT
-      );
+  @PostMapping(value="/fruits/{fruitName}", produces="application/json")
+  public ResponseEntity<?> add(@PathVariable("fruitName") String fruitName, @RequestBody FruitsMenuAddPayload priceItem) {
+    HttpStatus status = HttpStatus.OK;
+    int count = service.add(fruitName, priceItem.getPrice());
+    if (count == 0) {
+      status = HttpStatus.CONFLICT;
     }
-    return new ResponseEntity<StringResponse>(
-      new StringResponse("OK"), HttpStatus.OK
-    );
+
+    try {
+      return new ResponseEntity<FruitsMenu>(
+        service.findOneByName(fruitName).get(), status
+      );
+    } catch(NoSuchElementException ex) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @Transactional
   @DeleteMapping(value="/fruits/{fruitsName}", produces="application/json")
-  public ResponseEntity<StringResponse> delete(@PathVariable("fruitsName") String fruitsName) {
+  public ResponseEntity<?> delete(@PathVariable("fruitsName") String fruitsName) {
     service.deleteByName(fruitsName);
-    return new ResponseEntity<StringResponse>(
-      new StringResponse("OK"), HttpStatus.OK
-    );
+    return ResponseEntity.noContent().build();
   }
 }

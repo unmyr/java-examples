@@ -82,20 +82,48 @@ Open a new terminal and run the following command:
 +
 [source,console]
 ----
-$ curl -s -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 120}' | python -m json.tool
-{
-    "message": "OK"
-}
+$ curl -v -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 120}'
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> POST /api/fruits/Peach HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.58.0
+> Content-Type: application/json
+> Accept: application/json
+> Content-Length: 14
+>
+* upload completely sent off: 14 out of 14 bytes
+< HTTP/1.1 200
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Tue, 29 Nov 2022 13:24:27 GMT
+<
+* Connection #0 to host localhost left intact
+{"id":47,"name":"Peach","price":120,"modTime":"2022-11-29T13:24:27.775+00:00"}
 ----
 
 * PUT
 +
 [source,console]
 ----
-$ curl -s -X PUT http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 110}' | python -m json.tool
-{
-    "message": "OK"
-}
+$ curl -v -X PUT http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 110}'
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> PUT /api/fruits/Peach HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.58.0
+> Content-Type: application/json
+> Accept: application/json
+> Content-Length: 14
+>
+* upload completely sent off: 14 out of 14 bytes
+< HTTP/1.1 204
+< Date: Tue, 29 Nov 2022 11:44:46 GMT
+<
+* Connection #0 to host localhost left intact
 ----
 
 * GET
@@ -138,23 +166,25 @@ $ curl -s http://localhost:8080/api/fruits/Apple -H 'Accept: application/json' |
     "price": 100,
     "modTime": "2022-11-24T14:55:40.153+00:00"
 }
-$ curl -s http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
-{
-    "timestamp": "2022-11-27T14:32:42.966+00:00",
-    "status": 500,
-    "error": "Internal Server Error",
-    "path": "/api/fruits/Peach"
-}
 ----
 
 * DELETE
 +
 [source,console]
 ----
-$ curl -s -X DELETE http://localhost:8080/api/fruits/Peach -H 'Accept: application/json' | python -m json.tool
-{
-    "message": "OK"
-}
+$ curl -v -X DELETE http://localhost:8080/api/fruits/Peach -H 'Accept: application/json'
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> DELETE /api/fruits/Peach HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.58.0
+> Accept: application/json
+>
+< HTTP/1.1 204
+< Date: Tue, 29 Nov 2022 13:24:10 GMT
+<
+* Connection #0 to host localhost left intact
 ----
 
 . Make a package
@@ -174,7 +204,7 @@ $ java -jar target/fruits-menu-0.0.1-SNAPSHOT.jar
 ----
 +
 ----
-$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+$ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
 [
     {
         "id": 1,
@@ -261,7 +291,7 @@ docker-compose up -d
 +
 [source,console]
 ----
-$ curl -s http://localhost:8080/api/lists | python3 -m json.tool
+$ curl -s http://localhost:8080/api/fruits | python3 -m json.tool
 [
     {
         "id": 1,

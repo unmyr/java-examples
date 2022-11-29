@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class FruitsMenuService {
@@ -33,6 +35,7 @@ public class FruitsMenuService {
     ).stream().findFirst();
   }
 
+  @Transactional
   public int setPriceByName(String fruitName, int price) {
     return jdbcTemplate.update(
       "UPDATE fruits_menu SET price = ? WHERE name = ?",
@@ -40,15 +43,30 @@ public class FruitsMenuService {
     );
   }
 
+  @Transactional
   public int add(String fruitName, int price) {
-    return jdbcTemplate.update(
-      "INSERT INTO fruits_menu (name, price, mod_time) VALUES (?,?,?)",
-      fruitName,
-      price,
-      Timestamp.from(Instant.now())
-    );
+    try {
+      return jdbcTemplate.update(
+        "INSERT INTO fruits_menu (name, price, mod_time) VALUES (?,?,?)",
+        fruitName,
+        price,
+        Timestamp.from(Instant.now())
+      );
+    } catch(DataIntegrityViolationException ex) {
+      System.out.println("Class=" + ex.getClass().toString());
+      // Cause:
+      // org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint "fruits_menu_name_key"
+      //   Detail: Key (name)=(Peach) already exists.
+      System.out.println("Cause=" + ex.getCause());
+      // Message:
+      // PreparedStatementCallback; SQL [INSERT INTO fruits_menu (name, price, mod_time) VALUES (?,?,?)]; ERROR: duplicate key value violates unique constraint "fruits_menu_name_key"
+      //  Detail: Key (name)=(Peach) already exists.
+      System.out.println("Message=" + ex.getMessage());
+      return 0;
+    }
   }
 
+  @Transactional
   public int deleteByName(String fruitName) {
     return jdbcTemplate.update(
       "DELETE FROM fruits_menu WHERE name = ?",
