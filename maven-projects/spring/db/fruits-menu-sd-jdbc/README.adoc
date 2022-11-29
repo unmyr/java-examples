@@ -82,26 +82,27 @@ Open a new terminal and run the following command:
 +
 [source,console]
 ----
-$ curl -v -X POST http://localhost:8080/api/fruits/Peach -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"price": 120}'
+$ curl -v -X POST http://localhost:8080/api/fruits -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{"name":"Peach","price": 120}'
 Note: Unnecessary use of -X or --request, POST is already inferred.
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
-> POST /api/fruits/Peach HTTP/1.1
+> POST /api/fruits HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.58.0
 > Content-Type: application/json
 > Accept: application/json
-> Content-Length: 14
+> Content-Length: 29
 >
-* upload completely sent off: 14 out of 14 bytes
-< HTTP/1.1 200
+* upload completely sent off: 29 out of 29 bytes
+< HTTP/1.1 201
+< Location: http://localhost:8080/api/fruits/Peach
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Tue, 29 Nov 2022 13:24:27 GMT
+< Date: Tue, 29 Nov 2022 14:15:09 GMT
 <
 * Connection #0 to host localhost left intact
-{"id":47,"name":"Peach","price":120,"modTime":"2022-11-29T13:24:27.775+00:00"}
+{"id":49,"name":"Peach","price":120,"modTime":"2022-11-29T14:15:09.768+00:00"}
 ----
 
 * PUT

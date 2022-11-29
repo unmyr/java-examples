@@ -1,5 +1,6 @@
 package com.example;
 
+import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api")
@@ -30,9 +32,8 @@ public class FruitsMenuController {
   @RequestMapping(value="/fruits/{fruitName}", method=RequestMethod.GET)
   public ResponseEntity<FruitsMenu> show(@PathVariable("fruitName") String fruitName) {
     try {
-      return new ResponseEntity<FruitsMenu>(
-        service.findOneByName(fruitName).get(),
-        HttpStatus.OK
+      return ResponseEntity.ok(
+        service.findOneByName(fruitName).get()
       );
     } catch(NoSuchElementException ex) {
       return ResponseEntity.notFound().build();
@@ -48,18 +49,25 @@ public class FruitsMenuController {
     return ResponseEntity.notFound().build();
   }
 
-  @PostMapping(value="/fruits/{fruitName}", produces="application/json")
-  public ResponseEntity<?> add(@PathVariable("fruitName") String fruitName, @RequestBody FruitsMenuAddPayload priceItem) {
-    HttpStatus status = HttpStatus.OK;
-    int count = service.add(fruitName, priceItem.getPrice());
-    if (count == 0) {
-      status = HttpStatus.CONFLICT;
-    }
-
+  @PostMapping(value="/fruits", produces="application/json")
+  public ResponseEntity<?> add(
+    @RequestBody FruitsMenuAddPayload addPayload
+  ) {
     try {
-      return new ResponseEntity<FruitsMenu>(
-        service.findOneByName(fruitName).get(), status
-      );
+      String fruitName = addPayload.getName();
+      int count = service.add(fruitName, addPayload.getPrice());
+      FruitsMenu fruitItem = service.findOneByName(fruitName).get();
+
+      URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(fruitName)
+        .toUri();
+
+      if (count == 0) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(fruitItem);
+      } else {
+        return ResponseEntity.created(uri).body(fruitItem);
+      }
     } catch(NoSuchElementException ex) {
       return ResponseEntity.notFound().build();
     }

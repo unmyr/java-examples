@@ -104,15 +104,19 @@ public class FruitsMenuControllerTest {
 	public void addAndUpdate() throws Exception {
 		this.mockMvc.perform(
       MockMvcRequestBuilders.post(
-        "/api/fruits/Peach"
+        "/api/fruits"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":99}"
+        "{\"name\":\"Peach\", \"price\":99}"
       )
-    ).andDo(print()).andExpect(status().isOk()).andExpect(
+    ).andDo(
+      print()
+    ).andExpect(
+      status().isCreated()
+    ).andExpect(
       jsonPath("$.name").value("Peach")
     ).andExpect(
       jsonPath("$.price").value(99)
@@ -151,15 +155,19 @@ public class FruitsMenuControllerTest {
 	public void addConflictAndDelete() throws Exception {
 		this.mockMvc.perform(
       MockMvcRequestBuilders.post(
-        "/api/fruits/Durian"
+        "/api/fruits"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":500}"
+        "{\"name\":\"Durian\",\"price\":500}"
       )
-    ).andDo(print()).andExpect(status().isOk()).andExpect(
+    ).andDo(
+      print()
+    ).andExpect(
+      status().isCreated()
+    ).andExpect(
       jsonPath("$.name").value("Durian")
     ).andExpect(
       jsonPath("$.price").value(500)
@@ -167,13 +175,13 @@ public class FruitsMenuControllerTest {
 
     this.mockMvc.perform(
       MockMvcRequestBuilders.post(
-        "/api/fruits/Durian"
+        "/api/fruits"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
         MediaType.APPLICATION_JSON
       ).content(
-        "{\"price\":450}"
+        "{\"name\":\"Durian\",\"price\":450}"
       )
     ).andDo(print()).andExpect(
       status().is(HttpStatus.CONFLICT.value())
