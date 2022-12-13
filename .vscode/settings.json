@@ -16,6 +16,7 @@
     "cglib",
     "classpath",
     "codehaus",
+    "collatz",
     "Configurer",
     "Darchetype",
     "Dartifact",
@@ -65,5 +66,6 @@
     "Uncategorized",
     "vaadin",
     "xmlunit"
-  ]
+  ],
+  "java.compile.nullAnalysis.mode": "automatic"
 }
