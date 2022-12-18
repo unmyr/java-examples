@@ -1,0 +1,50 @@
+
+=== Run
+
+. Run command
++
+[source,shell]
+----
+./mvnw spring-boot:run
+----
++
+[source,shell]
+----
+SERVER_PORT=8080 BOOL_VALUE=true REMOTE_IP=127.0.0.1 ./mvnw spring-boot:run
+----
++
+[source,shell]
+----
+DEMO_SERVER_PORT=8081 BOOL_VALUE=true REMOTE_IP=127.0.0.1 ./mvnw spring-boot:run
+----
+
+=== Package
+
+. Create package
++
+[source,shell]
+----
+./mvnw package spring-boot:repackage
+----
+
+* Run
++
+[source,shell]
+----
+java -jar target/env-demo-0.0.1-SNAPSHOT.jar
+----
++
+[source,shell]
+----
+DEMO_SERVER_PORT=8081 BOOL_VALUE=true REMOTE_IP=127.0.0.1 java -jar target/env-demo-0.0.1-SNAPSHOT.jar
+----
++
+[source,shell]
+----
+DEMO_SERVER_PORT=8080 BOOL_VALUE=true java -jar target/env-demo-0.0.1-SNAPSHOT.jar
+----
++
+[source,shell]
+----
+java -jar target/env-demo-0.0.1-SNAPSHOT.jar --demo.SERVER_PORT=8080
+----
