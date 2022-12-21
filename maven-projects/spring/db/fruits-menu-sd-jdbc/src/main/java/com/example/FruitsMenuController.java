@@ -1,7 +1,8 @@
 package com.example;
 
 import java.net.URI;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,12 +27,13 @@ public class FruitsMenuController {
   FruitsMenuService service;
 
   @RequestMapping(value="/fruits", method=RequestMethod.GET)
-  public List<FruitsMenu> list() {
-    return service.findAll();
-  }
+  public ResponseEntity<?> list(
+    @RequestParam(name = "name", required = false) String fruitName
+  ) {
+    if (fruitName == null) {
+      return ResponseEntity.ok(service.findAll());
+    }
 
-  @RequestMapping(value="/fruits/{fruitName}", method=RequestMethod.GET)
-  public ResponseEntity<FruitsMenu> show(@PathVariable("fruitName") String fruitName) {
     try {
       return ResponseEntity.ok(
         service.findOneByName(fruitName).get()
@@ -40,9 +43,58 @@ public class FruitsMenuController {
     }
   }
 
-  @PutMapping(value="/fruits/{fruitsName}", produces="application/json")
-  public ResponseEntity<?> updatePrice(@PathVariable("fruitsName") String fruitsName, @RequestBody FruitsMenuAddPayload priceItem) {
-    int count = service.setPriceByName(fruitsName, priceItem.getPrice());
+  @PutMapping(value="/fruits", produces="application/json")
+  public ResponseEntity<?> updatePriceByName(
+    @RequestParam(name = "name", required = false) String fruitName,
+    @RequestBody FruitsMenuAddPayload priceItem
+  ) {
+    int count = 0;
+    if (fruitName != null) {
+      count = service.setPriceByName(fruitName, priceItem.getPrice());
+    }
+
+    Map<String,Object> map = new HashMap<>();
+    map.put("count", count);
+    if (count == 0) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @Transactional
+  @DeleteMapping(value="/fruits", produces="application/json")
+  public ResponseEntity<?> deleteItemByName(
+    @RequestParam(name = "name", required = false) String fruitName
+  ) {
+    int count = 0;
+    if (fruitName != null) {
+      count = service.deleteByName(fruitName);
+    }
+
+    Map<String,Object> map = new HashMap<>();
+    map.put("count", count);
+    return ResponseEntity.ok(map);
+  }
+
+  @RequestMapping(value="/fruits/{id}", method=RequestMethod.GET)
+  public ResponseEntity<FruitsMenu> getItemById(
+    @PathVariable("id") long itemId
+  ) {
+    try {
+      return ResponseEntity.ok(
+        service.findOneById(itemId).get()
+      );
+    } catch(NoSuchElementException ex) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @PutMapping(value="/fruits/{id}", produces="application/json")
+  public ResponseEntity<?> updatePrice(
+    @PathVariable("id") long itemId,
+    @RequestBody FruitsMenuAddPayload priceItem
+  ) {
+    int count = service.setPriceById(itemId, priceItem.getPrice());
     if (count > 0) {
       return ResponseEntity.noContent().build();
     }
@@ -74,9 +126,9 @@ public class FruitsMenuController {
   }
 
   @Transactional
-  @DeleteMapping(value="/fruits/{fruitsName}", produces="application/json")
-  public ResponseEntity<?> delete(@PathVariable("fruitsName") String fruitsName) {
-    service.deleteByName(fruitsName);
+  @DeleteMapping(value="/fruits/{id}", produces="application/json")
+  public ResponseEntity<?> deleteById(@PathVariable("id") long itemId) {
+    service.deleteById(itemId);
     return ResponseEntity.noContent().build();
   }
 }

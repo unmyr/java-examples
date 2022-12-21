@@ -27,12 +27,28 @@ public class FruitsMenuService {
     );
   }
 
+  public Optional<FruitsMenu> findOneById(long itemId) {
+    return jdbcTemplate.query(
+      "SELECT id, name, price, mod_time FROM fruits_menu WHERE id=?",
+      new FruitsMenuRowMapper(),
+      itemId
+    ).stream().findFirst();
+  }
+
   public Optional<FruitsMenu> findOneByName(String fruitName) {
     return jdbcTemplate.query(
       "SELECT id, name, price, mod_time FROM fruits_menu WHERE name=?",
       new FruitsMenuRowMapper(),
       fruitName
     ).stream().findFirst();
+  }
+
+  @Transactional
+  public int setPriceById(long itemId, int price) {
+    return jdbcTemplate.update(
+      "UPDATE fruits_menu SET price = ? WHERE id = ?",
+      price, itemId
+    );
   }
 
   @Transactional
@@ -71,6 +87,14 @@ public class FruitsMenuService {
     return jdbcTemplate.update(
       "DELETE FROM fruits_menu WHERE name = ?",
       fruitName
+    );
+  }
+
+  @Transactional
+  public int deleteById(long itemId) {
+    return jdbcTemplate.update(
+      "DELETE FROM fruits_menu WHERE id = ?",
+      itemId
     );
   }
 }

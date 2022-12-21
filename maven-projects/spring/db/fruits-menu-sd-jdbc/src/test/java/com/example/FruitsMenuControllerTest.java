@@ -13,6 +13,8 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.jayway.jsonpath.JsonPath;
+
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,7 +38,7 @@ public class FruitsMenuControllerTest {
 	public void getOneNotFound() throws Exception {
     this.mockMvc.perform(
       MockMvcRequestBuilders.get(
-        "/api/fruits/NotFound"
+        "/api/fruits?name=NotFound"
       ).accept(
         MediaType.APPLICATION_JSON
       )
@@ -46,10 +48,10 @@ public class FruitsMenuControllerTest {
   }
 
   @Test
-	public void putOneNotFound() throws Exception {
+	public void putOneByNameNotFound() throws Exception {
     this.mockMvc.perform(
       MockMvcRequestBuilders.put(
-        "/api/fruits/NotFound"
+        "/api/fruits?name=NotFound"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
@@ -63,15 +65,17 @@ public class FruitsMenuControllerTest {
   }
 
   @Test
-	public void deleteOneOk() throws Exception {
+	public void deleteOneByNameOk() throws Exception {
     this.mockMvc.perform(
       MockMvcRequestBuilders.delete(
-        "/api/fruits/NotFound"
+        "/api/fruits?name=NotFound"
       ).accept(
         MediaType.APPLICATION_JSON
       )
     ).andDo(print()).andExpect(
-      status().isNoContent()
+      status().isOk()
+    ).andExpect(
+      jsonPath("$.count").value(0)
     );
   }
 
@@ -101,7 +105,7 @@ public class FruitsMenuControllerTest {
   }
 
   @Test
-	public void addAndUpdate() throws Exception {
+	public void addAndUpdateByName() throws Exception {
 		this.mockMvc.perform(
       MockMvcRequestBuilders.post(
         "/api/fruits"
@@ -124,7 +128,7 @@ public class FruitsMenuControllerTest {
 
     this.mockMvc.perform(
       MockMvcRequestBuilders.put(
-        "/api/fruits/Peach"
+        "/api/fruits?name=Peach"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
@@ -133,12 +137,14 @@ public class FruitsMenuControllerTest {
         "{\"price\":101}"
       )
     ).andDo(print()).andExpect(
-      status().isNoContent()
+      status().isOk()
+    ).andExpect(
+      jsonPath("$.count").value(1)
     );
 
     this.mockMvc.perform(
       MockMvcRequestBuilders.get(
-        "/api/fruits/Peach"
+        "/api/fruits?name=Peach"
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
@@ -173,7 +179,7 @@ public class FruitsMenuControllerTest {
       jsonPath("$.price").value(500)
     );
 
-    this.mockMvc.perform(
+    final String content = this.mockMvc.perform(
       MockMvcRequestBuilders.post(
         "/api/fruits"
       ).contentType(
@@ -189,11 +195,12 @@ public class FruitsMenuControllerTest {
       jsonPath("$.name").value("Durian")
     ).andExpect(
       jsonPath("$.price").value(500)
-    );
+    ).andReturn().getResponse().getContentAsString();
 
+    int itemId = JsonPath.read(content, "$.id");
     this.mockMvc.perform(
       MockMvcRequestBuilders.delete(
-        "/api/fruits/Durian"
+        String.format("/api/fruits/%d", itemId)
       ).contentType(
         MediaType.APPLICATION_JSON
       ).accept(
