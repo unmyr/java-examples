@@ -76,6 +76,30 @@ public class FruitsMenuController {
     return ResponseEntity.ok(map);
   }
 
+  @PostMapping(value="/fruits", produces="application/json")
+  public ResponseEntity<?> add(
+    @RequestBody FruitsMenuAddPayload addPayload
+  ) {
+    try {
+      String fruitName = addPayload.getName();
+      int count = service.add(fruitName, addPayload.getPrice());
+      FruitsMenu fruitItem = service.findOneByName(fruitName).get();
+
+      URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(fruitName)
+        .toUri();
+
+      if (count == 0) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(fruitItem);
+      } else {
+        return ResponseEntity.created(uri).body(fruitItem);
+      }
+    } catch(NoSuchElementException ex) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
   @RequestMapping(value="/fruits/{id}", method=RequestMethod.GET)
   public ResponseEntity<FruitsMenu> getItemById(
     @PathVariable("id") long itemId
@@ -99,30 +123,6 @@ public class FruitsMenuController {
       return ResponseEntity.noContent().build();
     }
     return ResponseEntity.notFound().build();
-  }
-
-  @PostMapping(value="/fruits", produces="application/json")
-  public ResponseEntity<?> add(
-    @RequestBody FruitsMenuAddPayload addPayload
-  ) {
-    try {
-      String fruitName = addPayload.getName();
-      int count = service.add(fruitName, addPayload.getPrice());
-      FruitsMenu fruitItem = service.findOneByName(fruitName).get();
-
-      URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(fruitName)
-        .toUri();
-
-      if (count == 0) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(fruitItem);
-      } else {
-        return ResponseEntity.created(uri).body(fruitItem);
-      }
-    } catch(NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
   }
 
   @Transactional
