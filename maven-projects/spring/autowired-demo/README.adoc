@@ -1,0 +1,33 @@
+
+=== Run
+
+. Run command
++
+[source,shell]
+----
+./mvnw spring-boot:run
+----
++
+.Results
+----
+Hello John Doe.
+Hello Jane Doe.
+Hola Mengano,
+Bonjour John Dupont.
+----
+
+=== Package
+
+. Create package
++
+[source,shell]
+----
+./mvnw package spring-boot:repackage
+----
+
+* Run
++
+[source,shell]
+----
+java -jar target/autowired-demo-0.0.1-SNAPSHOT.jar
+----
