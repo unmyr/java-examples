@@ -2,14 +2,28 @@
 
 . Creating a new project, and go to the projects directory.
 +
-[source,console]
+--
+Creating a new project:
+[source,shell]
 ----
-$ mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -D groupId=com.example -DarchetypeVersion=1.0 -DartifactId=json-parse
+mvn -B archetype:generate \
+-DarchetypeGroupId=org.apache.maven.archetypes \
+-DarchetypeArtifactId=maven-archetype-quickstart \
+-DarchetypeVersion=1.4 \
+-DgroupId=com.example \
+-DartifactId=json-parse
 ----
-+
+go to the projects directory:
+[source,shell]
 ----
 cd json-parse
 ----
+--
++
+--
+.References
+* https://maven.apache.org/archetypes/maven-archetype-quickstart/[Maven Quickstart Archetype – Maven Quickstart Archetype^]
+--
 
 . Update pom.xml
 +
@@ -24,8 +38,8 @@ cd json-parse
 +  <url>http://www.example.com</url>
 +  <properties>
 +    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-+    <maven.compiler.source>1.8</maven.compiler.source>
-+    <maven.compiler.target>1.8</maven.compiler.target>
++    <maven.compiler.source>17</maven.compiler.source>
++    <maven.compiler.target>17</maven.compiler.target>
 +  </properties>
 +  <build>
 +    <plugins>
@@ -50,24 +64,24 @@ cd json-parse
      <dependency>
        <groupId>junit</groupId>
 @@ -14,5 +38,21 @@
-       <version>3.8.1</version>
+       <version>4.13.2</version>
        <scope>test</scope>
      </dependency>
 +    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 +    <dependency>
 +      <groupId>com.fasterxml.jackson.core</groupId>
 +      <artifactId>jackson-core</artifactId>
-+      <version>2.13.1</version>
++      <version>2.14.1</version>
 +    </dependency>
 +    <dependency>
 +      <groupId>com.fasterxml.jackson.core</groupId>
 +      <artifactId>jackson-databind</artifactId>
-+      <version>2.13.1</version>
++      <version>2.14.1</version>
 +    </dependency>
 +    <dependency>
 +      <groupId>com.fasterxml.jackson.core</groupId>
 +      <artifactId>jackson-annotations</artifactId>
-+      <version>2.13.1</version>
++      <version>2.14.1</version>
 +    </dependency>
    </dependencies>
  </project>
@@ -141,17 +155,20 @@ mvn dependency:copy-dependencies
 ----
 $ tree target/dependency
 target/dependency
-├── jackson-annotations-2.13.1.jar
-├── jackson-core-2.13.1.jar
-├── jackson-databind-2.13.1.jar
-└── junit-3.8.1.jar
+├── hamcrest-core-1.3.jar
+├── jackson-annotations-2.14.1.jar
+├── jackson-core-2.14.1.jar
+├── jackson-databind-2.14.1.jar
+└── junit-4.13.2.jar
+
+0 directories, 5 files
 ----
 
 . You may test the newly compiled and packaged JAR with the following command:
 +
 [source,console]
 ----
-$ java -cp target/json-parse-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.13.1.jar:target/dependency/jackson-databind-2.13.1.jar:target/dependency/jackson-annotations-2.13.1.jar com.example.App
+$ java -cp target/json-parse-1.0-SNAPSHOT.jar:target/dependency/jackson-core-2.14.1.jar:target/dependency/jackson-databind-2.14.1.jar:target/dependency/jackson-annotations-2.14.1.jar com.example.App
 Hello world.
 ----
 
