@@ -1,0 +1,25 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of File system
+
+=== Generate project
+
+. Using https://start.spring.io/[spring initializr^]
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: fs-demo
+Name:: FsDemo
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
+
+=== Tests
+
+[source,shell]
+----
+./mvnw test
+----

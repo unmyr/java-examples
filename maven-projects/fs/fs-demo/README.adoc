@@ -1,0 +1,43 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of File system
+
+=== Generate project
+
+. Creating a new project, and go to the projects directory.
++
+--
+Creating a new project:
+[source,shell]
+----
+mvn -B archetype:generate \
+-DarchetypeGroupId=org.apache.maven.archetypes \
+-DarchetypeArtifactId=maven-archetype-quickstart \
+-DarchetypeVersion=1.4 \
+-DgroupId=com.example \
+-DartifactId=fs-demo
+----
+go to the projects directory:
+[source,shell]
+----
+cd fs-demo
+----
+--
++
+--
+.References
+* https://maven.apache.org/archetypes/maven-archetype-quickstart/[Maven Quickstart Archetype - Maven Quickstart Archetype^]
+--
+
+
+=== Test
+
+[source,shell]
+----
+mvn test
+----
+
+.References
+* https://junit.org/junit5/docs/current/user-guide/[JUnit 5 User Guide^]
