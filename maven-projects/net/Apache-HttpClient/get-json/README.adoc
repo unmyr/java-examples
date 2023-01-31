@@ -125,7 +125,7 @@ $ mvn exec:java
 [INFO] Building get-json 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ get-json ---
+[INFO] --- exec-maven-plugin:3.1.0:java (default-cli) @ get-json ---
 FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
 FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
 FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=1, lastName=Last Name 3]

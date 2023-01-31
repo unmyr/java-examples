@@ -43,7 +43,7 @@ $ mvn exec:java
 [INFO] Building spring-batch-hello 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- exec-maven-plugin:3.0.0:java (default-cli) @ spring-batch-hello ---
+[INFO] --- exec-maven-plugin:3.1.0:java (default-cli) @ spring-batch-hello ---
 Name: JOHN DOE; Age: 35; Salary: 90000
 Name: SUE SMITH; Age: 45; Salary: 95000
 Name: JOE BROWN; Age: 33; Salary: 86000
@@ -110,7 +110,7 @@ target/dependency
 ├── json-smart-2.4.8.jar
 ├── jsonassert-1.5.1.jar
 ├── jul-to-slf4j-2.0.4.jar
-├── junit-3.8.1.jar
+├── junit-4.13.2.jar
 ├── junit-jupiter-5.9.1.jar
 ├── junit-jupiter-api-5.9.1.jar
 ├── junit-jupiter-engine-5.9.1.jar
