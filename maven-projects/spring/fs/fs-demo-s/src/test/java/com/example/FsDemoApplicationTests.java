@@ -75,7 +75,7 @@ class FsDemoApplicationTests {
 	}
 
 	/**
-	 * List a regular file.
+	 * List a socket file.
 	 * @throws IOException
 	 */
 	@Test
