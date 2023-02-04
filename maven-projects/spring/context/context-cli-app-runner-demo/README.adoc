@@ -1,0 +1,49 @@
+ifndef::imagesdir[]
+:imagesdir: docs/images
+endif::[]
+
+== Example of File system
+
+=== Generate project
+
+. Using https://start.spring.io/[spring initializr^]
++
+--
+[horizontal]
+Group:: com.example
+Artifact:: context-cli-app-runner-demo
+Name:: Demo
+Description:: Demo project for Spring Boot
+Package name:: com.example
+--
+
+=== Run
+
+[source,shell]
+----
+./mvnw spring-boot:run
+----
+
+or
+
+[source,shell]
+----
+./mvnw clean package spring-boot:repackage
+java -jar target/context-cli-app-runner-demo-0.0.1-SNAPSHOT.jar
+----
+
+[source,plaintext]
+.Results
+----
+class org.springframework.boot.context.event.ApplicationStartingEvent
+class org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
+class org.springframework.boot.context.event.ApplicationContextInitializedEvent
+class org.springframework.boot.context.event.ApplicationPreparedEvent
+class org.springframework.context.event.ContextRefreshedEvent: context is refreshed.
+class org.springframework.boot.context.event.ApplicationStartedEvent
+class org.springframework.boot.availability.AvailabilityChangeEvent
+Hello world
+class org.springframework.boot.context.event.ApplicationReadyEvent
+class org.springframework.boot.availability.AvailabilityChangeEvent
+class org.springframework.context.event.ContextClosedEvent: context is closed.
+----
