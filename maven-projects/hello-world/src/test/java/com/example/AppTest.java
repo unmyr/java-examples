@@ -1,38 +1,45 @@
 package com.example;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
+public class AppTest
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+
+    @BeforeEach
+    public void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        System.setOut(standardOut);
     }
 
     /**
-     * @return the suite of tests being tested
+     * Test for standard output
      */
-    public static Test suite()
+    @Test
+    public void shouldAnswerWithTrue()
     {
-        return new TestSuite( AppTest.class );
-    }
+        App.main(new String[]{});
 
-    /**
-     * App Test :-)
-     */
-    public void testApp()
-    {
-        assertEquals(App.getMessage(), "Hello World!");
+        final String outputExpected = "Hello world!";
+        final String outputActual = outputStreamCaptor.toString(StandardCharsets.UTF_8);
+        Assertions.assertTrue(
+            outputActual.contains(outputExpected),
+            "expect: " + outputExpected + "\n" + "actual: " + outputActual
+        );
     }
 }

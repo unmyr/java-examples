@@ -47,7 +47,14 @@ cd hello-world
 [source,diff]
 .pom.xml
 ----
-@@ -14,15 +14,15 @@
+@@ -7,69 +7,44 @@
+   <groupId>com.example</groupId>
+   <artifactId>hello-world</artifactId>
+   <version>1.0-SNAPSHOT</version>
+
+   <name>hello-world</name>
+   <!-- FIXME change it to the project's website -->
+   <url>http://www.example.com</url>
 
    <properties>
      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,17 +62,77 @@ cd hello-world
 -    <maven.compiler.target>1.7</maven.compiler.target>
 +    <maven.compiler.source>17</maven.compiler.source>
 +    <maven.compiler.target>17</maven.compiler.target>
++    <junitVersion>5.9.2</junitVersion>
    </properties>
 
    <dependencies>
++    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
      <dependency>
-       <groupId>junit</groupId>
-       <artifactId>junit</artifactId>
+-      <groupId>junit</groupId>
+-      <artifactId>junit</artifactId>
 -      <version>4.11</version>
-+      <version>4.13.2</version>
++      <groupId>org.junit.jupiter</groupId>
++      <artifactId>junit-jupiter-api</artifactId>
++      <version>${junitVersion}</version>
        <scope>test</scope>
      </dependency>
++    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
++    <dependency>
++      <groupId>org.junit.jupiter</groupId>
++      <artifactId>junit-jupiter-engine</artifactId>
++      <scope>test</scope>
++      <version>${junitVersion}</version>
++    </dependency>
    </dependencies>
+
+   <build>
+     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+       <plugins>
+-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+-        <plugin>
+-          <artifactId>maven-clean-plugin</artifactId>
+-          <version>3.1.0</version>
+-        </plugin>
+-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+-        <plugin>
+-          <artifactId>maven-resources-plugin</artifactId>
+-          <version>3.0.2</version>
+-        </plugin>
+-        <plugin>
+-          <artifactId>maven-compiler-plugin</artifactId>
+-          <version>3.8.0</version>
+-        </plugin>
++        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+         <plugin>
+           <artifactId>maven-surefire-plugin</artifactId>
+-          <version>2.22.1</version>
+-        </plugin>
+-        <plugin>
+-          <artifactId>maven-jar-plugin</artifactId>
+-          <version>3.0.2</version>
+-        </plugin>
+-        <plugin>
+-          <artifactId>maven-install-plugin</artifactId>
+-          <version>2.5.2</version>
+-        </plugin>
+-        <plugin>
+-          <artifactId>maven-deploy-plugin</artifactId>
+-          <version>2.8.2</version>
+-        </plugin>
+-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+-        <plugin>
+-          <artifactId>maven-site-plugin</artifactId>
+-          <version>3.7.1</version>
+-        </plugin>
+-        <plugin>
+-          <artifactId>maven-project-info-reports-plugin</artifactId>
+-          <version>3.0.0</version>
++          <version>3.0.0-M8</version>
+         </plugin>
+       </plugins>
+     </pluginManagement>
+   </build>
+ </project>
 ----
 
 . Build the Project
@@ -118,7 +185,13 @@ mvn dependency:copy-dependencies
 └── target
     :
     ├── dependency
-    :   └── junit-4.13.2.jar
+    │   ├── apiguardian-api-1.1.2.jar
+    │   ├── junit-jupiter-api-5.9.2.jar
+    │   ├── junit-jupiter-engine-5.9.2.jar
+    │   ├── junit-platform-commons-1.9.2.jar
+    │   ├── junit-platform-engine-1.9.2.jar
+    │   └── opentest4j-1.2.0.jar
+    :  
 ----
 
 . cleans up artifacts created by prior builds
