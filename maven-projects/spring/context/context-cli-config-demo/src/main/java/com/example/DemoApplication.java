@@ -1,27 +1,29 @@
 package com.example;
 
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-
-@Configuration
 @SpringBootApplication
 public class DemoApplication {
 	public static void main(String[] args) {
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
+		try (ConfigurableApplicationContext ctx = SpringApplication.run(DemoApplication.class, args)) {
+			ctx.addApplicationListener(new ContextObserver());
+			ctx.start();
+			DemoApplication app = ctx.getBean(DemoApplication.class);
+			app.run(args);
+			ctx.stop();
+			ctx.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext  (
-			DemoApplication.class
-		);
-		context.addApplicationListener(new ContextObserver());
-		context.start();
-		System.out.println("Hello world");
-		context.stop();
-		context.close();
+	public void run(String[] args) throws Exception {
+		if (args.length == 0) {
+			System.out.println("Hello world");
+		} else {
+			System.out.println("Hello " + args[0]);
+		}
 	}
 }

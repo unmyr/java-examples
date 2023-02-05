@@ -35,10 +35,12 @@ java -jar target/context-cli-config-demo-0.0.1-SNAPSHOT.jar
 [source,plaintext]
 .Results
 ----
+...
 class org.springframework.context.event.ContextStartedEvent
 Hello world
 class org.springframework.context.event.ContextStoppedEvent
 class org.springframework.context.event.ContextClosedEvent: context is closed.
+...
 ----
 
 === References
