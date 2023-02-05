@@ -4,14 +4,15 @@ import java.net.InetAddress;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.Banner;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-public class EnvDemoApplication implements CommandLineRunner {
+public class EnvDemoApplication implements ApplicationRunner {
 	@Autowired
 	private Environment env;
 
@@ -37,7 +38,7 @@ public class EnvDemoApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(ApplicationArguments args) throws Exception {
 		System.out.println("getProperty:lang=" + env.getProperty("lang"));
 		System.out.println("getProperty:BOOL_VALUE=" + env.getProperty("BOOL_VALUE")); // true/false/null
 		System.out.println("getProperty:demo.langName=" + env.getProperty("demo.langName"));
@@ -49,6 +50,6 @@ public class EnvDemoApplication implements CommandLineRunner {
 		System.out.println("config:demo.bool-value=" + config.isBoolValue()); // true/false
 		System.out.println("config:demo.langName=" + config.getLangName());
 		System.out.println("config:demo.remote-ip=" + config.getRemoteIp().getHostAddress());
-		System.out.println("config:demo.SERVER_PORT=" + config.getServerPort());
+		System.out.println("config:demo.SERVER_PORT=" + config.getServerPort());		
 	}
 }
