@@ -18,6 +18,10 @@ public class DemoApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("Hello world");
+		if (args.getSourceArgs().length == 0) {
+			System.out.println("Hello world");
+		} else {
+			System.out.println("Hello " + args.getNonOptionArgs().get(0));
+		}
 	}
 }

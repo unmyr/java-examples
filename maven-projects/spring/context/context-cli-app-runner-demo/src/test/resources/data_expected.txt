@@ -1,0 +1,8 @@
+class org.springframework.context.event.ContextRefreshedEvent: context is refreshed.
+class org.springframework.boot.context.event.ApplicationStartedEvent
+class org.springframework.boot.availability.AvailabilityChangeEvent
+Hello John
+class org.springframework.boot.context.event.ApplicationReadyEvent
+class org.springframework.boot.availability.AvailabilityChangeEvent
+class org.springframework.test.context.event.PrepareTestInstanceEvent
+class org.springframework.test.context.event.BeforeTestMethodEvent
