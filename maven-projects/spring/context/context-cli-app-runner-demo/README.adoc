@@ -17,6 +17,215 @@ Description:: Demo project for Spring Boot
 Package name:: com.example
 --
 
+=== Edit sources
+
+* Implements ApplicationListener
++
+[source,java]
+.src/main/java/com/example/ContextObserver.java
+----
+package com.example;
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
+
+public class ContextObserver implements ApplicationListener<ApplicationEvent> {
+
+  @Override
+  public void onApplicationEvent(ApplicationEvent event) {
+    if (event instanceof ContextRefreshedEvent) {
+      System.out.println(event.getClass() + ": context is refreshed.");
+    } else if (event instanceof ContextClosedEvent) {
+      System.out.println(event.getClass() + ": context is closed.");
+    } else {
+      System.out.println(event.getClass());
+    }
+  }
+
+}
+----
++
+[source,java]
+.src/main/java/com/example/DemoApplication.java
+----
+package com.example;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication implements ApplicationRunner {
+
+	public static void main(String[] args) {
+		SpringApplication app = new SpringApplication(DemoApplication.class);
+		app.setBannerMode(Banner.Mode.OFF);
+		app.addListeners(new ContextObserver());  //<1>
+		app.run(args);
+	}
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		if (args.getSourceArgs().length == 0) {
+			System.out.println("Hello world");
+		} else {
+			System.out.println("Hello " + args.getNonOptionArgs().get(0));
+		}
+	}
+}
+----
+<1> This line required
++
+[source,java]
+.src/test/java/com/example/DemoApplicationTests.java
+----
+package com.example;
+
+import java.io.InputStream;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.context.annotation.Import;
+
+@SpringBootTest(args = "John")
+@ExtendWith(OutputCaptureExtension.class)
+@Import(ContextObserver.class)  //<1>
+class DemoApplicationTests {
+
+	@Test
+	public void testRunEachLine(CapturedOutput output) throws Exception {
+		Assertions.assertThat(output).contains(": context is refreshed.");
+		Assertions.assertThat(output).contains("Hello John");
+		Test.class.getClassLoader();
+	}
+
+	@Test
+	public void testMultiline(CapturedOutput output) throws Exception {
+		final InputStream is = ClassLoader.getSystemResourceAsStream("data_expected.txt");
+		final byte[] b = new byte[is.available()];
+		is.read(b);
+		Assertions.assertThat(output).contains(new String(b, "UTF-8"));
+	}
+
+}
+----
+<1> This line required
+
+* Using `@EventListener` annotation
++
+[source,java]
+.src/main/java/com/example/ContextObserver.java
+----
+package com.example;
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ContextObserver {
+  @EventListener
+  public void handleContextRefresh(ContextRefreshedEvent event) {
+    System.out.println(event.getClass() + ": context is refreshed.");
+  }
+
+  @EventListener
+  public void handleContextClosed(ContextClosedEvent event) {
+    System.out.println(event.getClass() + ": context is closed.");
+  }
+
+  @EventListener
+  public void onApplicationEvent(ApplicationEvent event) {
+    if (event instanceof ContextRefreshedEvent || event instanceof ContextClosedEvent) {
+      return;
+    } else {
+      System.out.println(event.getClass());
+    }
+  }
+
+}
+----
++
+[source,java]
+.src/main/java/com/example/DemoApplication.java
+----
+package com.example;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication implements ApplicationRunner {
+
+	public static void main(String[] args) {
+		SpringApplication app = new SpringApplication(DemoApplication.class);
+		app.setBannerMode(Banner.Mode.OFF);
+		app.run(args);
+	}
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		if (args.getSourceArgs().length == 0) {
+			System.out.println("Hello world");
+		} else {
+			System.out.println("Hello " + args.getNonOptionArgs().get(0));
+		}
+	}
+}
+----
++
+[source,java]
+.src/test/java/com/example/DemoApplicationTests.java
+----
+package com.example;
+
+import java.io.InputStream;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.context.annotation.Import;
+
+@SpringBootTest(args = "John")
+@ExtendWith(OutputCaptureExtension.class)
+class DemoApplicationTests {
+
+	@Test
+	public void testRunEachLine(CapturedOutput output) throws Exception {
+		Assertions.assertThat(output).contains(": context is refreshed.");
+		Assertions.assertThat(output).contains("Hello John");
+		Test.class.getClassLoader();
+	}
+
+	@Test
+	public void testMultiline(CapturedOutput output) throws Exception {
+		final InputStream is = ClassLoader.getSystemResourceAsStream("data_expected.txt");
+		final byte[] b = new byte[is.available()];
+		is.read(b);
+		Assertions.assertThat(output).contains(new String(b, "UTF-8"));
+	}
+
+}
+----
+
+
+
 === Run
 
 [source,shell]
@@ -47,3 +256,6 @@ class org.springframework.boot.context.event.ApplicationReadyEvent
 class org.springframework.boot.availability.AvailabilityChangeEvent
 class org.springframework.context.event.ContextClosedEvent: context is closed.
 ----
+
+=== References
+* https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2[Better application events in Spring Framework 4.2 | spring.io^]

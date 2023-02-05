@@ -39,6 +39,7 @@
     "imagesdir",
     "initdb",
     "initializr",
+    "instanceof",
     "istack",
     "jandex",
     "Javac",

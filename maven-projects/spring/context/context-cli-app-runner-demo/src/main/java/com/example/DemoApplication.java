@@ -12,7 +12,6 @@ public class DemoApplication implements ApplicationRunner {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(DemoApplication.class);
 		app.setBannerMode(Banner.Mode.OFF);
-		app.addListeners(new ContextObserver());
 		app.run(args);
 	}
 

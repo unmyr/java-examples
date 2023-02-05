@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootTest(args = "John")
 @ExtendWith(OutputCaptureExtension.class)
-@Import(ContextObserver.class)
 class DemoApplicationTests {
 
 	@Test
