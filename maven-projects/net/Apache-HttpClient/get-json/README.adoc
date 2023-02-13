@@ -161,9 +161,9 @@ target/dependency
 ├── httpclient5-5.2.1.jar
 ├── httpcore5-5.2.jar
 ├── httpcore5-h2-5.2.jar
-├── jackson-annotations-2.14.1.jar
-├── jackson-core-2.14.1.jar
-├── jackson-databind-2.14.1.jar
+├── jackson-annotations-2.14.2.jar
+├── jackson-core-2.14.2.jar
+├── jackson-databind-2.14.2.jar
 ├── junit-4.13.2.jar
 └── slf4j-api-1.7.36.jar
 
@@ -174,7 +174,7 @@ target/dependency
 +
 [source,console]
 ----
-$ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/httpclient5-5.2.1.jar:target/dependency/httpcore5-5.2.jar:target/dependency/httpcore5-5.2.jar:target/dependency/httpcore5-h2-5.2.jar:target/dependency/jackson-annotations-2.14.1.jar:target/dependency/jackson-core-2.14.1.jar:target/dependency/jackson-databind-2.14.1.jar:target/dependency/slf4j-api-1.7.36.jar com.example.App
+$ java -cp target/get-json-1.0-SNAPSHOT.jar:target/dependency/httpclient5-5.2.1.jar:target/dependency/httpcore5-5.2.jar:target/dependency/httpcore5-5.2.jar:target/dependency/httpcore5-h2-5.2.jar:target/dependency/jackson-annotations-2.14.2.jar:target/dependency/jackson-core-2.14.2.jar:target/dependency/jackson-databind-2.14.2.jar:target/dependency/slf4j-api-1.7.36.jar com.example.App
 FakeRestApiAuthors [firstName=First Name 1, id=1, idBook=1, lastName=Last Name 1]
 FakeRestApiAuthors [firstName=First Name 2, id=2, idBook=1, lastName=Last Name 2]
 FakeRestApiAuthors [firstName=First Name 3, id=3, idBook=2, lastName=Last Name 3]
