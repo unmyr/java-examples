@@ -52,3 +52,10 @@ There are 2 choices for the alternative java (providing /usr/bin/java).
 Press <enter> to keep the current choice[*], or type selection number: 1
 update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/java to provide /usr/bin/java (java) in manual mode
 ----
+
+==== Ubuntu 22.04 LTS
+
+[source,shell]
+----
+apt -y install openjdk-17-jdk
+----
