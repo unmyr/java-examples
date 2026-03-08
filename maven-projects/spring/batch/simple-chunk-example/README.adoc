@@ -61,14 +61,14 @@ jobName:listEmployeesJob, jobBatchStatus:COMPLETED
 
 . Make a package
 +
-[source,console]
+[source,shell]
 ----
-$ mvn package
+mvn package
 ----
 
 . Copy dependencies.
 +
-[source,console]
+[source,shell]
 ----
 mvn dependency:copy-dependencies
 ----
@@ -86,17 +86,17 @@ target/dependency
 ├── antlr4-runtime-4.10.1.jar
 ├── apiguardian-api-1.1.2.jar
 ├── asm-9.1.jar
-├── aspectjweaver-1.9.9.1.jar
+├── aspectjweaver-1.9.19.jar
 ├── assertj-core-3.23.1.jar
-├── byte-buddy-1.12.19.jar
-├── byte-buddy-agent-1.12.19.jar
+├── byte-buddy-1.12.22.jar
+├── byte-buddy-agent-1.12.22.jar
 ├── classmate-1.5.1.jar
 ├── h2-2.1.214.jar
 ├── hamcrest-2.2.jar
 ├── hibernate-commons-annotations-6.0.2.Final.jar
-├── hibernate-core-6.1.5.Final.jar
+├── hibernate-core-6.1.6.Final.jar
 ├── istack-commons-runtime-4.1.1.jar
-├── jakarta.activation-api-2.1.0.jar
+├── jakarta.activation-api-2.1.1.jar
 ├── jakarta.annotation-api-2.1.1.jar
 ├── jakarta.inject-api-2.0.0.jar
 ├── jakarta.persistence-api-3.1.0.jar
@@ -109,57 +109,58 @@ target/dependency
 ├── json-path-2.7.0.jar
 ├── json-smart-2.4.8.jar
 ├── jsonassert-1.5.1.jar
-├── jul-to-slf4j-2.0.4.jar
-├── junit-4.13.2.jar
-├── junit-jupiter-5.9.1.jar
-├── junit-jupiter-api-5.9.1.jar
-├── junit-jupiter-engine-5.9.1.jar
-├── junit-jupiter-params-5.9.1.jar
-├── junit-platform-commons-1.9.1.jar
-├── junit-platform-engine-1.9.1.jar
+├── jul-to-slf4j-2.0.6.jar
+├── junit-jupiter-5.9.2.jar
+├── junit-jupiter-api-5.9.2.jar
+├── junit-jupiter-engine-5.9.2.jar
+├── junit-jupiter-params-5.9.2.jar
+├── junit-platform-commons-1.9.2.jar
+├── junit-platform-engine-1.9.2.jar
 ├── log4j-api-2.19.0.jar
 ├── log4j-to-slf4j-2.19.0.jar
 ├── logback-classic-1.4.5.jar
 ├── logback-core-1.4.5.jar
-├── micrometer-commons-1.10.2.jar
-├── micrometer-core-1.10.2.jar
-├── micrometer-observation-1.10.2.jar
+├── micrometer-commons-1.10.3.jar
+├── micrometer-core-1.10.3.jar
+├── micrometer-observation-1.10.3.jar
 ├── mockito-core-4.8.1.jar
 ├── mockito-junit-jupiter-4.8.1.jar
 ├── objenesis-3.2.jar
 ├── opentest4j-1.2.0.jar
-├── slf4j-api-2.0.4.jar
+├── slf4j-api-2.0.6.jar
 ├── snakeyaml-1.33.jar
-├── spring-aop-6.0.2.jar
-├── spring-aspects-6.0.2.jar
+├── spring-aop-6.0.4.jar
+├── spring-aspects-6.0.4.jar
 ├── spring-batch-core-5.0.0.jar
 ├── spring-batch-infrastructure-5.0.0.jar
 ├── spring-batch-test-5.0.0.jar
-├── spring-beans-6.0.2.jar
-├── spring-boot-3.0.0.jar
-├── spring-boot-autoconfigure-3.0.0.jar
-├── spring-boot-starter-3.0.0.jar
-├── spring-boot-starter-aop-3.0.0.jar
-├── spring-boot-starter-batch-3.0.0.jar
-├── spring-boot-starter-data-jpa-3.0.0.jar
-├── spring-boot-starter-jdbc-3.0.0.jar
-├── spring-boot-starter-logging-3.0.0.jar
-├── spring-boot-starter-test-3.0.0.jar
-├── spring-boot-test-3.0.0.jar
-├── spring-boot-test-autoconfigure-3.0.0.jar
-├── spring-context-6.0.2.jar
-├── spring-core-6.0.2.jar
-├── spring-data-commons-3.0.0.jar
-├── spring-data-jpa-3.0.0.jar
-├── spring-expression-6.0.2.jar
-├── spring-jcl-6.0.2.jar
-├── spring-jdbc-6.0.2.jar
-├── spring-orm-6.0.2.jar
+├── spring-beans-6.0.4.jar
+├── spring-boot-3.0.2.jar
+├── spring-boot-autoconfigure-3.0.2.jar
+├── spring-boot-starter-3.0.2.jar
+├── spring-boot-starter-aop-3.0.2.jar
+├── spring-boot-starter-batch-3.0.2.jar
+├── spring-boot-starter-data-jpa-3.0.2.jar
+├── spring-boot-starter-jdbc-3.0.2.jar
+├── spring-boot-starter-logging-3.0.2.jar
+├── spring-boot-starter-test-3.0.2.jar
+├── spring-boot-test-3.0.2.jar
+├── spring-boot-test-autoconfigure-3.0.2.jar
+├── spring-context-6.0.4.jar
+├── spring-core-6.0.4.jar
+├── spring-data-commons-3.0.1.jar
+├── spring-data-jpa-3.0.1.jar
+├── spring-expression-6.0.4.jar
+├── spring-jcl-6.0.4.jar
+├── spring-jdbc-6.0.4.jar
+├── spring-orm-6.0.4.jar
 ├── spring-retry-2.0.0.jar
-├── spring-test-6.0.2.jar
-├── spring-tx-6.0.2.jar
+├── spring-test-6.0.4.jar
+├── spring-tx-6.0.4.jar
 ├── txw2-4.0.1.jar
-└── xmlunit-core-2.9.0.jar
+└── xmlunit-core-2.9.1.jar
+
+1 directory, 82 files
 ----
 
 . You may test the newly compiled and packaged JAR with the following command:
@@ -172,7 +173,7 @@ $ java -cp target/spring-batch-hello-1.0-SNAPSHOT.jar:target/dependency/...
 
 . cleans up artifacts created by prior builds
 +
-[source,console]
+[source,shell]
 ----
 mvn clean
 ----
