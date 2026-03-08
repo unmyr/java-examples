@@ -17,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <junitVersion>5.13.2</junitVersion>
+    <junitVersion>6.0.3</junitVersion>
   </properties>
 
   <build>

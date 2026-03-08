@@ -122,9 +122,9 @@ public class App
 
 . Build the Project
 +
-[source,console]
+[source,shell]
 ----
-$ mvn compile
+mvn compile
 ----
 
 . Run App
@@ -139,32 +139,34 @@ Hello world.
 
 . Make a package
 +
-[source,console]
+[source,shell]
 ----
-$ mvn package
+mvn package
 ----
 
 . Copy dependencies.
 +
-[source,console]
+[source,shell]
 ----
 mvn dependency:copy-dependencies
 ----
 +
 [source,console]
 ----
+$ tree target/dependency
 target/dependency
 ├── apiguardian-api-1.1.2.jar
 ├── jackson-annotations-2.21.jar
 ├── jackson-core-2.21.1.jar
 ├── jackson-databind-2.21.1.jar
-├── junit-jupiter-api-5.14.3.jar
-├── junit-jupiter-engine-5.14.3.jar
-├── junit-platform-commons-1.14.3.jar
-├── junit-platform-engine-1.14.3.jar
+├── jspecify-1.0.0.jar
+├── junit-jupiter-api-6.0.3.jar
+├── junit-jupiter-engine-6.0.3.jar
+├── junit-platform-commons-6.0.3.jar
+├── junit-platform-engine-6.0.3.jar
 └── opentest4j-1.3.0.jar
 
-1 directory, 9 files
+1 directory, 10 files
 ----
 
 . You may test the newly compiled and packaged JAR with the following command:
@@ -177,7 +179,7 @@ Hello world.
 
 . cleans up artifacts created by prior builds
 +
-[source,console]
+[source,shell]
 ----
 mvn clean
 ----

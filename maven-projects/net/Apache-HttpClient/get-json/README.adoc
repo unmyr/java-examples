@@ -109,9 +109,9 @@ public class FakeRestApiAuthors {
 
 . Build the Project
 +
-[source,console]
+[source,shell]
 ----
-$ mvn compile
+mvn compile
 ----
 
 . Run App
@@ -148,7 +148,7 @@ $ mvn package
 
 . Copy dependencies.
 +
-[source,console]
+[source,shell]
 ----
 mvn dependency:copy-dependencies
 ----
@@ -164,14 +164,15 @@ target/dependency
 ├── jackson-annotations-2.21.jar
 ├── jackson-core-2.21.1.jar
 ├── jackson-databind-2.21.1.jar
-├── junit-jupiter-api-5.13.2.jar
-├── junit-jupiter-engine-5.13.2.jar
-├── junit-platform-commons-1.13.2.jar
-├── junit-platform-engine-1.13.2.jar
+├── jspecify-1.0.0.jar
+├── junit-jupiter-api-6.0.3.jar
+├── junit-jupiter-engine-6.0.3.jar
+├── junit-platform-commons-6.0.3.jar
+├── junit-platform-engine-6.0.3.jar
 ├── opentest4j-1.3.0.jar
 └── slf4j-api-1.7.36.jar
 
-1 directory, 13 files
+1 directory, 14 files
 ----
 
 . You may test the newly compiled and packaged JAR with the following command:
